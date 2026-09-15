@@ -1,0 +1,592 @@
+/* ==========================================================================
+   Component index — mirrors the Figma "Components" page 1:1
+   --------------------------------------------------------------------------
+   Button ........ .btn + .btn-primary | .btn-accent | .btn-outline | .btn-quiet
+   Chip .......... .chip  (aria-pressed=true = selected)
+   Badge ......... .badge + .badge-promo | .badge-navy | .badge-low
+   Status chip ... .status + .status-active | .status-ending | .status-ended
+   App bar ....... .appbar + .appbar-brand | .appbar-search | .appbar-float
+   Section head .. .sect-head
+   List row ...... .acct-row | .row-link | .row  (+ .switch for toggles)
+   Field ......... .field > label + .input | .select | .input-group
+   Tab bar ....... .tabbar  (a[aria-current=page] = active)
+   Step indicator  .steps  (built by ESA.steps(current, total))
+   Photo ......... .photo + .photo-navy | .photo-slate | .photo-sand | .photo-accent
+   Sheet ......... .sheet + .sheet-backdrop + .sheet-head + .sheet-body
+   Switch ........ .switch > input + .track
+   Gauge ......... .gauge > i
+   --------------------------------------------------------------------------
+   Extra Space Asia — mobile app UI kit
+   Blue-led palette: the corporate identity leans navy/blue (their site CTAs are
+   #00245d), so chrome and actions are blue and the logo red is kept as an
+   accent only. Swap the --brand-* ramp to retheme.
+   Layout target: 402 x 874 (iPhone 17). On wider screens the app renders inside a
+   device frame so it can be reviewed on a laptop.
+   ========================================================================== */
+
+:root{
+  --brand-800:#001a44;
+  --brand-700:#00245d;   /* deep navy — app bars, heroes, brand bands */
+  --brand-600:#083c80;   /* pressed state */
+  --brand-500:#0b4da2;   /* primary interactive blue — buttons, links, active */
+  --brand-400:#3c78c8;
+  --brand-050:#eaf1fa;
+
+  --accent-500:#d82424;  /* logo red — also the conversion CTA colour */
+  --accent-600:#b81c1c;
+  --accent-050:#fdeeee;
+
+  --navy:#00245d;
+  --navy-700:#001a44;
+
+  --ink:#252525;
+  --body:#5a5a5a;
+  --muted:#8a8a8a;
+  --line:#e7e4de;
+  --line-strong:#d4d0c8;
+  --surface:#fcfcfa;
+  --sand:#f2eee6;
+  --card:#ffffff;
+
+  --amber:#f0a020;
+  --green:#1a8f5a;
+  --red-alert:#c0392b;
+
+  --r-sm:10px;
+  --r-md:14px;
+  --r-lg:20px;
+  --r-xl:26px;
+  --r-pill:999px;
+
+  --sh-sm:0 1px 2px rgba(37,37,37,.06), 0 1px 3px rgba(37,37,37,.07);
+  --sh-md:0 6px 18px rgba(37,37,37,.10);
+  --sh-lg:0 -8px 30px rgba(37,37,37,.16);
+
+  --appbar-h:58px;
+  --tabbar-h:64px;
+  --safe-b:env(safe-area-inset-bottom, 0px);
+
+  --font:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:var(--font);font-size:15px;line-height:1.5;color:var(--body);
+  background:var(--surface);-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;
+}
+h1,h2,h3,h4{margin:0 0 .4em;color:var(--ink);line-height:1.25;font-weight:700;letter-spacing:-.01em;}
+h1{font-size:24px;} h2{font-size:19px;} h3{font-size:16px;}
+p{margin:0 0 .9em;}
+a{color:var(--brand-500);text-decoration:none;}
+ul{margin:0;padding:0;list-style:none;}
+button{font:inherit;}
+img,svg{max-width:100%;}
+:focus-visible{outline:3px solid var(--brand-400);outline-offset:2px;border-radius:6px;}
+/* component rules set display, so `hidden` needs to win globally */
+[hidden]{display:none !important;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+/* ---------- app shell ---------------------------------------------------- */
+.app{
+  position:relative;display:flex;flex-direction:column;
+  width:100%;height:100dvh;background:var(--surface);overflow:hidden;
+}
+.screen{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.screen-pad{padding-bottom:calc(24px + var(--safe-b));}
+
+@media (min-width:560px){
+  body{background:#e4e1db;display:flex;align-items:center;justify-content:center;padding:20px;}
+  /* iPhone 17 logical size — matches the Figma frames (402 x 874) */
+  .app{
+    width:402px;height:min(874px, calc(100dvh - 40px));
+    border-radius:44px;box-shadow:0 30px 70px rgba(0,0,0,.28), 0 0 0 10px #1a1a1a, 0 0 0 12px #3a3a3a;
+  }
+}
+
+/* ---------- app bar ------------------------------------------------------ */
+.appbar{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  min-height:var(--appbar-h);padding:8px 16px;background:var(--card);
+  border-bottom:1px solid var(--line);position:relative;z-index:20;
+}
+.appbar-brand{background:var(--brand-700);border-bottom-color:var(--brand-800);}
+.appbar h1{font-size:17px;margin:0;flex:1;text-align:center;}
+.appbar-brand h1,.appbar-brand .icon-btn{color:#fff;}
+.icon-btn{
+  width:38px;height:38px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:none;border:0;border-radius:var(--r-pill);color:var(--ink);cursor:pointer;
+}
+.icon-btn:active{background:rgba(0,0,0,.06);}
+.appbar-brand .icon-btn:active{background:rgba(255,255,255,.15);}
+.market-btn{
+  display:flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;
+  font-size:14px;font-weight:600;color:var(--ink);padding:8px 4px;
+}
+.market-btn .flag{font-size:16px;}
+
+/* ---------- brand mark --------------------------------------------------- */
+.logo{display:inline-flex;align-items:center;gap:8px;}
+.logo-mark{
+  width:30px;height:30px;flex-shrink:0;border-radius:8px;background:#fff;
+  padding:4px;box-sizing:border-box;object-fit:contain;
+}
+.logo-text{display:flex;flex-direction:column;line-height:1.05;}
+.logo-text strong{font-size:15px;color:var(--ink);letter-spacing:-.02em;}
+.logo-text span{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--brand-500);font-weight:700;}
+.logo-on-dark .logo-text strong{color:#fff;}
+.logo-on-dark .logo-text span{color:#a9c4e8;}
+
+/* ---------- tab bar ------------------------------------------------------ */
+.tabbar{
+  flex:0 0 auto;display:flex;background:var(--card);border-top:1px solid var(--line);
+  padding-bottom:var(--safe-b);position:relative;z-index:20;
+}
+.tabbar a{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-height:var(--tabbar-h);color:var(--muted);font-size:11px;font-weight:600;text-decoration:none;
+}
+.tabbar a[aria-current="page"]{color:var(--brand-500);}
+.tabbar svg{width:23px;height:23px;}
+
+/* ---------- buttons ------------------------------------------------------ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:700;font-size:15px;line-height:1;min-height:48px;padding:0 20px;
+  border-radius:var(--r-pill);border:1.5px solid transparent;cursor:pointer;text-decoration:none;
+  transition:background .15s,border-color .15s,color .15s,transform .06s;
+}
+.btn:active{transform:scale(.985);}
+.btn-primary{background:var(--brand-500);color:#fff;}
+.btn-primary:active{background:var(--brand-600);}
+.btn-navy{background:var(--navy);color:#fff;}
+/* Red is reserved for commercial conversion CTAs (enquire, pay) so it keeps
+   its weight — navigation and sign-in stay blue. */
+.btn-accent{background:var(--accent-500);color:#fff;}
+.btn-accent:active{background:var(--accent-600);}
+.btn-outline{background:transparent;color:var(--ink);border-color:var(--line-strong);}
+.btn-outline:active{background:var(--sand);}
+.btn-quiet{background:var(--sand);color:var(--ink);}
+.btn-block{width:100%;}
+.btn-sm{min-height:38px;font-size:14px;padding:0 16px;}
+.btn-lg{min-height:54px;font-size:16px;}
+.btn:disabled{opacity:.45;}
+
+/* ---------- generic bits ------------------------------------------------- */
+.sect{padding:24px 16px 4px;}
+.sect-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.sect-head h2{margin:0;font-size:17px;}
+.sect-head a{font-size:13px;font-weight:700;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);}
+.hint{font-size:12.5px;color:var(--muted);margin:4px 0 0;}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;
+  padding:4px 8px;border-radius:var(--r-pill);background:var(--brand-050);color:var(--brand-700);
+  white-space:nowrap;
+}
+.badge-promo{background:#fff3dc;color:#8a5a05;}
+.badge-navy{background:#e7edf7;color:var(--navy);}
+.badge-low{background:#fdeceb;color:#a02f22;}
+.chip{
+  flex:0 0 auto;font-size:13px;font-weight:600;color:var(--body);background:var(--card);
+  border:1.5px solid var(--line-strong);border-radius:var(--r-pill);padding:8px 16px;cursor:pointer;
+  white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;}
+.chip-row{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none;}
+.chip-row::-webkit-scrollbar{display:none;}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:4px 16px 16px;scroll-snap-type:x mandatory;scrollbar-width:none;}
+.hscroll::-webkit-scrollbar{display:none;}
+.hscroll > *{scroll-snap-align:start;flex:0 0 auto;}
+.rating{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--ink);}
+.stars{color:var(--amber);letter-spacing:.5px;}
+.price{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.02em;}
+.price small{font-size:12px;font-weight:600;color:var(--muted);}
+.price-was{font-size:12.5px;color:var(--muted);text-decoration:line-through;margin-right:5px;}
+.divider{height:8px;background:var(--sand);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:20px 0 0;}
+
+/* photo stand-ins: flat roll-up-door facade */
+.photo{
+  position:relative;display:block;overflow:hidden;background:var(--brand-600);
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.52)),
+    linear-gradient(180deg, #1d63b8, var(--brand-800));
+}
+.photo-navy{background-image:
+  linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.52)),
+  linear-gradient(180deg,#0a3f86,#00142f);}
+.photo-accent{background-image:
+  linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.52)),
+  linear-gradient(180deg,#d82424,#8f1616);}
+.photo-slate{background-image:
+  linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.52)),
+  linear-gradient(180deg,#6b6b66,#2c2c29);}
+.photo-sand{background-image:
+  linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.52)),
+  linear-gradient(180deg,#d8cfc0,#a2937d);}
+.photo > img{
+  position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;
+}
+.photo-cap{
+  position:absolute;left:10px;bottom:8px;color:#fff;font-size:11px;font-weight:600;
+  text-shadow:0 1px 3px rgba(0,0,0,.5);
+}
+
+/* ---------- forms -------------------------------------------------------- */
+.field{margin-bottom:16px;}
+.field > label,.label{display:block;font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.input,.select,.textarea{
+  width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--card);
+  border:1.5px solid var(--line-strong);border-radius:var(--r-md);padding:16px;min-height:50px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.input::placeholder{color:#a8a49d;}
+.input:focus,.select:focus,.textarea:focus{
+  outline:none;border-color:var(--brand-500);box-shadow:0 0 0 3px var(--brand-050);
+}
+.input[aria-invalid="true"]{border-color:var(--red-alert);}
+.error-msg{display:none;color:var(--red-alert);font-size:12.5px;font-weight:600;margin:6px 0 0;}
+.field.has-error .error-msg{display:block;}
+.select{
+  appearance:none;padding-right:40px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235a5a5a' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:12px;
+}
+.input-group{position:relative;}
+.input-group .input{padding-right:76px;}
+.input-affix{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  background:none;border:0;font-size:13px;font-weight:700;color:var(--brand-500);
+  cursor:pointer;padding:8px;border-radius:var(--r-sm);
+}
+.search-field{position:relative;}
+.search-field .input{padding-left:40px;border-radius:var(--r-pill);background:var(--card);}
+.search-field svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);}
+
+.check{display:flex;align-items:flex-start;gap:8px;font-size:14px;cursor:pointer;}
+.check input{position:absolute;opacity:0;width:0;height:0;}
+.check .mark{
+  flex-shrink:0;width:22px;height:22px;border:1.5px solid var(--line-strong);border-radius:7px;
+  background:#fff;position:relative;margin-top:1px;
+}
+.check input:checked + .mark{background:var(--brand-500);border-color:var(--brand-500);}
+.check input:checked + .mark::after{
+  content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+.check input:focus-visible + .mark{outline:3px solid var(--brand-400);outline-offset:2px;}
+.check.radio .mark{border-radius:50%;}
+.check.radio input:checked + .mark{background:#fff;border-color:var(--brand-500);border-width:7px;}
+.check.radio input:checked + .mark::after{display:none;}
+
+/* ---------- account & booking lists ------------------------------------- */
+.acct{padding:16px 16px calc(24px + var(--safe-b));}
+.unit-card{padding:16px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line);
+  box-shadow:var(--sh-sm);margin:0 0 14px;}
+.unit-card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.unit-card h2{font-size:17px;margin:0 0 2px;}
+.unit-card .sub{font-size:12.5px;color:var(--muted);margin:0;}
+.unit-card .due{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  margin:14px 0 0;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;}
+.unit-card .btns{display:flex;gap:8px;margin:14px 0 0;}
+.unit-card .btns .btn{flex:1;min-height:44px;font-size:14px;}
+.gate-out{
+  margin:12px 0 0;padding:12px;border-radius:var(--r-md);background:var(--brand-050);
+  text-align:center;
+}
+.gate{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:26px;font-weight:700;
+  letter-spacing:.26em;color:var(--ink);display:block;margin-bottom:4px;}
+.acct-rows{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin:0 0 14px;}
+.acct-row{display:flex;align-items:center;gap:12px;padding:16px 16px;border-bottom:1px solid var(--line);
+  color:inherit;width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left;cursor:pointer;}
+.acct-row:last-child{border-bottom:0;}
+.acct-row:active{background:var(--sand);}
+.acct-row .ic{width:38px;height:38px;flex-shrink:0;border-radius:var(--r-sm);background:var(--sand);
+  color:var(--ink);display:flex;align-items:center;justify-content:center;}
+.acct-row strong{display:block;font-size:14.5px;color:var(--ink);}
+.acct-row span{font-size:12.5px;color:var(--muted);}
+.acct-row .chev{margin-left:auto;color:var(--muted);}
+.acct-head{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin:22px 0 8px;}
+
+/* ---------- status chips ------------------------------------------------ */
+.status{
+  display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;
+  padding:4px 8px;border-radius:var(--r-pill);white-space:nowrap;
+}
+.status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+.status-active{background:#e6f4ec;color:#12704a;}
+.status-ending{background:#fff3dc;color:#8a5a05;}
+.status-ended{background:var(--sand);color:var(--muted);}
+
+/* ---------- stepper (size estimator) ------------------------------------ */
+.stepper{display:flex;align-items:center;gap:4px;}
+.stepper button{
+  width:34px;height:34px;flex-shrink:0;border-radius:50%;border:1.5px solid var(--line-strong);
+  background:var(--card);color:var(--ink);font-size:19px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.stepper button:disabled{opacity:.35;cursor:default;}
+.stepper button:active:not(:disabled){background:var(--brand-050);border-color:var(--brand-500);}
+.stepper .n{min-width:30px;text-align:center;font-size:15px;font-weight:700;color:var(--ink);}
+.stepper .n.zero{color:var(--muted);font-weight:600;}
+
+/* ---------- capacity gauge ---------------------------------------------- */
+.gauge{height:10px;border-radius:var(--r-pill);background:var(--line);overflow:hidden;}
+.gauge i{display:block;height:100%;border-radius:var(--r-pill);background:var(--brand-500);
+  transition:width .3s ease;}
+.gauge.over i{background:var(--accent-500);}
+
+/* ---------- notifications ----------------------------------------------- */
+.bell-wrap{position:relative;}
+.bell-dot{
+  position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;
+  background:var(--accent-500);border:1.5px solid var(--brand-700);
+}
+.notif-banner{
+  display:flex;align-items:flex-start;gap:12px;margin:14px 16px 0;padding:12px 16px;
+  background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent-500);
+  border-radius:var(--r-md);box-shadow:var(--sh-sm);
+}
+.notif-banner .ic{
+  width:32px;height:32px;flex-shrink:0;border-radius:var(--r-sm);background:var(--accent-050);
+  color:var(--accent-500);display:flex;align-items:center;justify-content:center;
+}
+.notif-banner strong{display:block;font-size:14px;color:var(--ink);}
+.notif-banner p{margin:2px 0 0;font-size:12.5px;color:var(--muted);}
+.notif-banner .act{display:flex;gap:16px;margin-top:9px;}
+.notif-banner .act a,.notif-banner .act button{
+  font-size:13px;font-weight:700;color:var(--brand-500);background:none;border:0;padding:0;cursor:pointer;
+}
+.notif-item{display:flex;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);}
+.notif-item:last-child{border-bottom:0;}
+.notif-item .ic{
+  width:36px;height:36px;flex-shrink:0;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+}
+.notif-item.unread .ic{background:var(--accent-050);color:var(--accent-500);}
+.notif-item .ic{background:var(--sand);color:var(--muted);}
+.notif-item.unread .ic{background:var(--accent-050);color:var(--accent-500);}
+.notif-item strong{display:block;font-size:14.5px;color:var(--ink);}
+.notif-item p{margin:2px 0 0;font-size:13px;color:var(--body);}
+.notif-item .when{display:block;font-size:12px;color:var(--muted);margin-top:5px;}
+.notif-item a{font-size:13px;font-weight:700;}
+
+/* ---------- switch ------------------------------------------------------ */
+.switch{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.switch input{position:absolute;opacity:0;width:0;height:0;}
+.switch .track{
+  flex-shrink:0;width:48px;height:29px;border-radius:var(--r-pill);background:var(--line-strong);
+  position:relative;transition:background .18s;
+}
+.switch .track::after{
+  content:"";position:absolute;left:3px;top:3px;width:23px;height:23px;border-radius:50%;
+  background:#fff;box-shadow:var(--sh-sm);transition:transform .18s;
+}
+.switch input:checked + .track{background:var(--brand-500);}
+.switch input:checked + .track::after{transform:translateX(19px);}
+.switch input:focus-visible + .track{outline:3px solid var(--brand-400);outline-offset:2px;}
+
+/* ---------- bottom sheet ------------------------------------------------- */
+.sheet-backdrop{
+  position:absolute;inset:0;background:rgba(25,20,20,.5);opacity:0;pointer-events:none;
+  transition:opacity .22s;z-index:40;
+}
+.sheet-backdrop.open{opacity:1;pointer-events:auto;}
+.sheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:50;background:var(--card);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;box-shadow:var(--sh-lg);
+  transform:translateY(100%);transition:transform .26s cubic-bezier(.32,.72,0,1);
+  max-height:88%;display:flex;flex-direction:column;
+}
+.sheet.open{transform:translateY(0);}
+.sheet-handle{width:38px;height:4px;border-radius:2px;background:var(--line-strong);margin:10px auto 4px;flex-shrink:0;}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px 8px;flex-shrink:0;}
+.sheet-head h2{margin:0;font-size:18px;}
+.sheet-body{overflow-y:auto;padding:0 16px calc(20px + var(--safe-b));}
+
+/* ---------- sticky CTA bar ---------------------------------------------- */
+.cta-bar{
+  flex:0 0 auto;display:flex;align-items:center;gap:12px;background:var(--card);
+  border-top:1px solid var(--line);padding:12px 16px calc(12px + var(--safe-b));
+  box-shadow:0 -4px 16px rgba(37,37,37,.06);position:relative;z-index:20;
+}
+.cta-bar .price{font-size:19px;}
+
+
+/* ---------- auth: shared by the login screen and the in-context sheet ---- */
+.known{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+  background:var(--card);border:1.5px solid var(--brand-500);border-radius:var(--r-md);
+  padding:16px;margin:0 0 14px;
+}
+.known .av{width:40px;height:40px;border-radius:50%;background:var(--brand-050);color:var(--brand-700);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+.known strong{display:block;font-size:14.5px;color:var(--ink);}
+.known span{font-size:12.5px;color:var(--muted);}
+.known .go{margin-left:auto;color:var(--brand-500);font-weight:700;font-size:13px;}
+
+.phone-field{display:flex;gap:8px;}
+.phone-prefix{
+  flex:0 0 92px;display:flex;align-items:center;justify-content:center;gap:8px;
+  border:1.5px solid var(--line-strong);border-radius:var(--r-md);background:var(--card);
+  font-size:15px;font-weight:600;color:var(--ink);
+}
+.phone-field .input{flex:1;}
+
+.otp{display:flex;gap:8px;margin:4px 0 6px;}
+.otp input{
+  flex:1;min-width:0;height:58px;text-align:center;font-size:22px;font-weight:700;color:var(--ink);
+  border:1.5px solid var(--line-strong);border-radius:var(--r-md);background:var(--card);
+  font-family:var(--font);
+}
+.otp input:focus{outline:none;border-color:var(--brand-500);box-shadow:0 0 0 3px var(--brand-050);}
+.otp.bad input{border-color:var(--red-alert);}
+.resend{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:14px 0 0;font-size:13px;}
+.resend button{background:none;border:0;font-size:13px;font-weight:700;color:var(--brand-500);cursor:pointer;padding:4px 0;}
+.resend button:disabled{color:var(--muted);cursor:default;}
+.demo-code{
+  background:#eef3fb;border:1px dashed #b9cbe6;border-radius:var(--r-sm);color:var(--navy);
+  font-size:12px;padding:8px 12px;margin:14px 0 0;
+}
+.alert{
+  display:none;gap:8px;align-items:flex-start;background:#fdeceb;border:1px solid #f3c9c4;
+  color:#8f2418;border-radius:var(--r-md);padding:12px 12px;font-size:13.5px;margin:0 0 16px;
+}
+.alert.show{display:flex;}
+.textlink{
+  display:block;width:100%;background:none;border:0;text-align:center;cursor:pointer;
+  font-size:13.5px;font-weight:700;color:var(--brand-500);padding:16px 0 0;
+}
+.textlink.inline{display:inline;width:auto;padding:0;font-size:13.5px;}
+.legal{font-size:11.5px;color:var(--muted);text-align:center;margin:14px 0 0;line-height:1.5;}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12.5px;margin:18px 0;}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line);}
+
+/* ---------- brand splash ------------------------------------------------ */
+/* Team review: the brand shows for under a second, then fades away. */
+.splash{
+  position:absolute;inset:0;z-index:200;background:var(--brand-700);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  transition:opacity .32s ease;
+}
+.splash.gone{opacity:0;pointer-events:none;}
+/* the supplied lockup is the knockout version — red mark, white wordmark —
+   so it sits on the navy brand surfaces, not on white */
+.splash-lockup{ width:180px;height:auto;display:block; }
+.logo-lockup{ height:34px;width:auto;display:block;flex-shrink:0; }
+.splash-word{text-align:center;color:#fff;}
+.splash-word strong{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;}
+.splash-word span{display:block;font-size:11px;font-weight:600;letter-spacing:.28em;color:#a9c4e8;margin-top:4px;}
+
+/* ---------- step indicator ---------------------------------------------- */
+.steps{display:flex;align-items:center;gap:8px;margin:0 0 12px;}
+.steps i{display:block;width:24px;height:4px;border-radius:2px;background:var(--line);}
+.steps i.on{background:var(--brand-500);}
+.steps span{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted);}
+
+/* ---------- diving into a location -------------------------------------- */
+/* Chromium morphs same-origin navigations when this is declared; the tapped
+   thumbnail and the facility hero share a view-transition-name, so the card
+   grows into the hero instead of the page cutting. Other browsers ignore it. */
+@view-transition { navigation: auto; }
+
+/* while the map flies to the pin, get the sheet and chrome out of the way */
+body.diving .locsheet{ transform:translateY(100%) !important; transition:transform .42s cubic-bezier(.32,.72,0,1); }
+body.diving .chip-row,body.diving .fab,body.diving .redo{ opacity:0; transition:opacity .25s; }
+@media (prefers-reduced-motion: reduce){
+  body.diving .locsheet{ transition:none; }
+}
+
+/* ---------- screen motion ----------------------------------------------- */
+/* Entrances are added by JS (see ESA.animate) so nothing is hidden if the
+   script fails. One easing curve and one distance keeps it coherent. */
+/* Team review: fade in / fade out for all transitions — no directional slides. */
+@keyframes esa-rise  { from { opacity:0; } to { opacity:1; } }
+@keyframes esa-fade  { from { opacity:0; } to { opacity:1; } }
+@keyframes esa-pop   { from { opacity:0; } to { opacity:1; } }
+@keyframes esa-slide-down { from { opacity:0; } to { opacity:1; } }
+@keyframes esa-slide-up   { from { transform:translateY(100%); } to { transform:none; } }
+@keyframes esa-drop  { from { opacity:0; } to { opacity:1; } }
+@keyframes esa-bump  { 0%{transform:scale(1);} 40%{transform:scale(1.18);} 100%{transform:scale(1);} }
+
+.esa-anim{ opacity:0; }
+.esa-anim.esa-in{
+  /* opacity is declared, and fill-mode is forwards rather than both, so a
+     page that never runs animations still ends up visible. The stagger is
+     applied in JS by delaying the class, not by animation-delay. */
+  opacity:1;
+  animation:esa-rise .5s cubic-bezier(.22,.9,.24,1) forwards;
+}
+.esa-anim[data-anim="fade"].esa-in{ animation-name:esa-fade; }
+.esa-anim[data-anim="pop"].esa-in{ animation-name:esa-pop; }
+.esa-anim[data-anim="down"].esa-in{ animation-name:esa-slide-down; }
+
+.cta-bar{ animation:esa-slide-up .42s cubic-bezier(.22,.9,.24,1) both .12s; }
+.pin.esa-in{ animation:esa-drop .5s cubic-bezier(.22,.9,.24,1) forwards; }
+.stepper .n.bumped{ animation:esa-bump .28s ease-out; }
+.tabbar a[aria-current="page"] svg{ animation:esa-bump .4s ease-out .2s; }
+
+/* pressable surfaces acknowledge the tap */
+.fac-card:active,.size-card:active,.result:active,.unit:active,.preset:active,
+.unit-card:active,.acct-row:active,.row:active,.promo:active{ transform:scale(.988); }
+.fac-card,.size-card,.result,.unit,.preset,.unit-card,.promo{ transition:transform .12s ease-out; }
+
+@media (prefers-reduced-motion: reduce){
+  .esa-anim,.esa-anim.esa-in,.cta-bar,.pin.esa-in,.stepper .n.bumped,
+  .tabbar a[aria-current="page"] svg{ animation:none !important; opacity:1 !important; }
+  .fac-card:active,.size-card:active,.result:active,.unit:active,.preset:active,
+  .unit-card:active,.acct-row:active,.row:active,.promo:active{ transform:none; }
+}
+
+/* ---------- motion ------------------------------------------------------ */
+/* Steps animate in so a multi-step flow reads as progress, not a redraw. */
+@keyframes esa-step-in { from { opacity:0; } to { opacity:1; } }
+.step-in{ animation:esa-step-in .28s cubic-bezier(.32,.72,0,1) both; }
+
+@keyframes esa-spin { to { transform:rotate(360deg); } }
+.spinner{
+  display:inline-block;width:15px;height:15px;border-radius:50%;vertical-align:-2px;
+  border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:esa-spin .7s linear infinite;
+}
+.btn-outline .spinner,.textlink .spinner{border-color:rgba(37,37,37,.25);border-top-color:var(--ink);}
+
+@media (prefers-reduced-motion: reduce){
+  .step-in{animation:none;}
+  .spinner{animation-duration:2s;}
+  .sheet{transition:none;}
+}
+
+/* ---------- toast -------------------------------------------------------- */
+.toast{
+  position:absolute;left:16px;right:16px;bottom:calc(16px + var(--tabbar-h));z-index:70;
+  background:var(--ink);color:#fff;border-radius:var(--r-md);padding:12px 16px;font-size:14px;
+  opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* ---------- map water ------------------------------------------------------
+   The basemap draws land only (see basemap.js), so the container colour is
+   the sea. No tiles are ever requested, which is what makes the map work
+   from a zipped folder with no connection. */
+/* Leaflet's own stylesheet loads after this one and sets
+   .leaflet-container{background:#ddd} at the same specificity, so it wins on
+   order. Target the two map elements by id to outrank it. */
+#map, #fac-map{ background:#d5e4f0; }
+.leaflet-container .leaflet-control-attribution{
+  background:rgba(255,255,255,.72); font-size:10px; color:var(--muted);
+}
+
+/* ---------- page fades without the View Transitions API --------------------
+   Cross-document view transitions need a real same origin, which a zipped
+   prototype opened from file:// does not have. When the native path is
+   unavailable app.js sets .esa-pagefade and we animate the shell by hand, so the
+   "fade in / fade out on every transition" behaviour survives distribution. */
+html.esa-pagefade .app{ animation:esa-page-in .22s ease both; }
+html.esa-pagefade.esa-leaving .app{ animation:esa-page-out .15s ease both; }
+@keyframes esa-page-in { from{ opacity:0; } to{ opacity:1; } }
+@keyframes esa-page-out{ from{ opacity:1; } to{ opacity:0; } }
+@media (prefers-reduced-motion: reduce){
+  html.esa-pagefade .app,
+  html.esa-pagefade.esa-leaving .app{ animation:none; }
+}

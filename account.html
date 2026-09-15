@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>My storage | Extra Space Asia</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='9' fill='%2300245d'/><path d='M13 28.5V17.6L20 13l7 4.6v10.9' stroke='white' stroke-width='2.6' fill='none'/></svg>">
+<link rel="stylesheet" href="assets/styles.css?v=4">
+<style>
+/* ---------- my storage: the gated screen and its wall ---------- */
+
+/* --- the wall --- */
+.wall{padding:8px 16px calc(28px + var(--safe-b));}
+.wall-preview{position:relative;margin:0 0 22px;}
+.wall-preview .peek{filter:blur(5px);opacity:.55;pointer-events:none;user-select:none;}
+.wall-lock{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;text-align:center;
+}
+.wall-lock .ic{
+  width:52px;height:52px;border-radius:50%;background:var(--card);box-shadow:var(--sh-md);
+  display:flex;align-items:center;justify-content:center;color:var(--brand-500);
+}
+.wall-lock span{
+  background:var(--card);box-shadow:var(--sh-sm);border-radius:var(--r-pill);
+  font-size:12px;font-weight:700;color:var(--ink);padding:8px 12px;
+}
+.wall h1{font-size:22px;margin:0 0 6px;}
+.wall .reason{font-size:14.5px;margin:0 0 18px;}
+.wall-perks{margin:0 0 22px;}
+.wall-perks li{display:flex;gap:12px;padding:8px 0;font-size:14px;border-bottom:1px solid var(--line);}
+.wall-perks li:last-child{border-bottom:0;}
+.wall-perks .ic{width:34px;height:34px;flex-shrink:0;border-radius:var(--r-sm);background:var(--brand-050);
+  color:var(--brand-500);display:flex;align-items:center;justify-content:center;}
+.wall-perks strong{display:block;color:var(--ink);font-size:14px;}
+.wall-perks span{font-size:12.5px;color:var(--muted);}
+
+/* account + booking list styles now live in assets/styles.css */
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="appbar">
+    <a class="icon-btn" href="home.html" aria-label="Back">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 5-7 7 7 7"/></svg>
+    </a>
+    <h1>My storage</h1>
+    <button class="icon-btn" type="button" id="signout-btn" aria-label="Sign out" hidden>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M14 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7"/><path d="M17 8.5 20.5 12 17 15.5M20.5 12H11"/></svg>
+    </button>
+    <span class="icon-btn" id="appbar-spacer" aria-hidden="true"></span>
+  </header>
+
+  <main class="screen" id="screen"></main>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="home.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z"/></svg>
+      Home
+    </a>
+    <a href="map.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      Locations
+    </a>
+    <a href="account.html" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M3.5 12h17M9 7.5V5h6v2.5"/></svg>
+      My storage
+    </a>
+    <a href="profile.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </a>
+  </nav>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/auth.js"></script>
+<script src="assets/account.js"></script>
+</body>
+</html>

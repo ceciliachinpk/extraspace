@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Locations | Extra Space Asia</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='9' fill='%2300245d'/><path d='M13 28.5V17.6L20 13l7 4.6v10.9' stroke='white' stroke-width='2.6' fill='none'/></svg>">
+<link rel="stylesheet" href="assets/styles.css?v=4">
+<link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+<style>
+/* ---------- locations screen ---------- */
+.appbar-search{padding:8px 8px;gap:8px;}
+.appbar-search .search-field{flex:1;}
+.appbar-search .search-field .input{min-height:44px;font-size:15px;padding-top:0;padding-bottom:0;}
+.filter-btn{position:relative;}
+.filter-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--brand-500);display:none;}
+.filter-btn.on .filter-dot{display:block;}
+
+.maparea{flex:1 1 auto;position:relative;overflow:hidden;}
+#map{position:absolute;inset:0;z-index:0;}  /* z-index:0 keeps Leaflet's panes below the sheet; water colour lives on .leaflet-container */
+.fab{
+  position:absolute;right:14px;z-index:30;width:44px;height:44px;border-radius:var(--r-pill);
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--sh-md);
+  display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:pointer;
+}
+#locate-fab{top:14px;}
+.redo{
+  position:absolute;left:50%;transform:translateX(-50%);top:14px;z-index:30;
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--sh-md);
+  border-radius:var(--r-pill);padding:8px 16px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;
+}
+
+/* results sheet docked in the map area */
+.locsheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:35;height:78%;
+  background:var(--card);border-radius:var(--r-xl) var(--r-xl) 0 0;box-shadow:var(--sh-lg);
+  display:flex;flex-direction:column;
+  transform:translateY(calc(100% - 208px));
+  transition:transform .28s cubic-bezier(.32,.72,0,1);
+}
+.locsheet.full{transform:translateY(0);}
+.locsheet-grab{padding:8px 0 4px;cursor:grab;flex-shrink:0;background:none;border:0;width:100%;}
+.locsheet-grab i{display:block;width:38px;height:4px;border-radius:2px;background:var(--line-strong);margin:0 auto;}
+.locsheet-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:4px 16px 8px;flex-shrink:0;}
+.locsheet-head h1{font-size:16px;margin:0;}
+.locsheet-head .sortbtn{background:none;border:0;font-size:13px;font-weight:700;color:var(--brand-500);cursor:pointer;padding:4px;}
+.locsheet-list{overflow-y:auto;padding:0 0 calc(12px + var(--safe-b));overscroll-behavior:contain;}
+
+.result{
+  display:grid;grid-template-columns:78px 1fr;gap:12px;padding:12px 16px;
+  border-top:1px solid var(--line);cursor:pointer;align-items:start;
+}
+.result:first-child{border-top:0;}
+.result.active{background:var(--brand-050);}
+.result .photo{height:78px;border-radius:var(--r-md);}
+.result h2{font-size:15px;margin:0 0 2px;}
+.result .addr{font-size:12.5px;color:var(--muted);margin:0 0 7px;}
+.result .meta{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:12px;color:var(--muted);margin-bottom:8px;}
+.result .foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;}
+.empty{padding:40px 24px;text-align:center;color:var(--muted);}
+
+/* price pins */
+.pin{
+  background:var(--ink);color:#fff;font:700 12px/1 var(--font);padding:8px 8px;
+  border-radius:var(--r-pill);border:2px solid #fff;box-shadow:var(--sh-md);white-space:nowrap;text-align:center;
+}
+.pin.active{background:var(--brand-500);}
+.leaflet-popup-content{margin:12px 14px;font-family:var(--font);}
+.leaflet-popup-content h3{font-size:14px;margin:0 0 2px;}
+.leaflet-popup-content p{font-size:12px;color:var(--muted);margin:0 0 8px;}
+.leaflet-control-attribution{font-size:9px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="appbar appbar-search">
+    <a class="icon-btn" href="home.html" aria-label="Back">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 5-7 7 7 7"/></svg>
+    </a>
+    <form class="search-field" id="area-form" role="search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+      <label class="sr-only" for="q">Search area, MRT or facility</label>
+      <input class="input" id="q" name="q" type="search" placeholder="Search area, MRT or facility" value="Singapore">
+    </form>
+    <button class="icon-btn filter-btn" type="button" id="filter-btn" aria-label="Filters">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 7h16M7 12h10M10 17h4"/></svg>
+      <span class="filter-dot" aria-hidden="true"></span>
+    </button>
+  </header>
+
+  <div class="chip-row" role="group" aria-label="Filter by size" id="size-chips">
+    <button class="chip" type="button" data-size="all" aria-pressed="true">All sizes</button>
+    <button class="chip" type="button" data-size="locker">Lockers</button>
+    <button class="chip" type="button" data-size="small">Small</button>
+    <button class="chip" type="button" data-size="medium">Medium</button>
+    <button class="chip" type="button" data-size="large">Large</button>
+    <button class="chip" type="button" data-size="wine">Wine</button>
+  </div>
+
+  <div class="maparea">
+    <div id="map" role="application" aria-label="Map of storage facilities"></div>
+    <button class="fab" type="button" id="locate-fab" aria-label="Centre on my location">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg>
+    </button>
+    <button class="redo" type="button" id="redo" hidden>Search this area</button>
+
+    <section class="locsheet" id="locsheet" aria-label="Facility results">
+      <button class="locsheet-grab" type="button" id="grab" aria-expanded="false" aria-controls="result-list">
+        <i aria-hidden="true"></i><span class="sr-only">Expand results list</span>
+      </button>
+      <div class="locsheet-head">
+        <h1 id="results-count">7 facilities</h1>
+        <button class="sortbtn" type="button" id="sort-btn">
+          <span id="sort-label">Nearest</span> &#9662;
+        </button>
+      </div>
+      <div class="locsheet-list" id="result-list"></div>
+    </section>
+  </div>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="home.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z"/></svg>
+      Home
+    </a>
+    <a href="map.html" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      Locations
+    </a>
+    <a href="account.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M3.5 12h17M9 7.5V5h6v2.5"/></svg>
+      My storage
+    </a>
+    <a href="profile.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </a>
+  </nav>
+
+  <!-- filters sheet -->
+  <div class="sheet-backdrop" id="filter-sheet-backdrop"></div>
+  <section class="sheet" id="filter-sheet" role="dialog" aria-modal="true" aria-labelledby="filter-title" aria-hidden="true">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="filter-title">Filters</h2>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <h3 style="font-size:14px;margin:6px 0 10px">Unit type</h3>
+      <label class="check" style="padding:8px 0"><input type="checkbox" data-feature="aircon"><span class="mark" aria-hidden="true"></span><span>Air-conditioned</span></label>
+      <label class="check" style="padding:8px 0"><input type="checkbox" data-feature="nonaircon"><span class="mark" aria-hidden="true"></span><span>Non air-conditioned</span></label>
+      <label class="check" style="padding:8px 0"><input type="checkbox" data-feature="wine"><span class="mark" aria-hidden="true"></span><span>Wine storage</span></label>
+
+      <h3 style="font-size:16px;margin:18px 0 10px">Facility</h3>
+      <label class="check" style="padding:8px 0"><input type="checkbox" data-feature="24-7"><span class="mark" aria-hidden="true"></span><span>24/7 access</span></label>
+      <label class="check" style="padding:8px 0"><input type="checkbox" data-feature="loading"><span class="mark" aria-hidden="true"></span><span>Loading bay</span></label>
+      <label class="check" style="padding:8px 0"><input type="checkbox" data-feature="business"><span class="mark" aria-hidden="true"></span><span>Business storage</span></label>
+
+      <h3 style="font-size:16px;margin:18px 0 10px">Sort by</h3>
+      <label class="check radio" style="padding:8px 0"><input type="radio" name="sort" value="distance" checked><span class="mark" aria-hidden="true"></span><span>Nearest first</span></label>
+      <label class="check radio" style="padding:8px 0"><input type="radio" name="sort" value="price"><span class="mark" aria-hidden="true"></span><span>Lowest price</span></label>
+      <label class="check radio" style="padding:8px 0"><input type="radio" name="sort" value="rating"><span class="mark" aria-hidden="true"></span><span>Highest rated</span></label>
+
+      <div style="display:flex;gap:8px;margin:22px 0 0">
+        <button class="btn btn-outline" type="button" id="filter-clear" style="flex:0 0 40%">Clear</button>
+        <button class="btn btn-primary" type="button" id="filter-apply" style="flex:1">Show results</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="assets/vendor/leaflet/leaflet.js"></script>
+<script src="assets/basemap.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/map.js"></script>
+</body>
+</html>

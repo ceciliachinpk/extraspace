@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#00245d">
+<title>Facility | Extra Space Asia</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='9' fill='%2300245d'/><path d='M13 28.5V17.6L20 13l7 4.6v10.9' stroke='white' stroke-width='2.6' fill='none'/></svg>">
+<link rel="stylesheet" href="assets/styles.css?v=4">
+<link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css">
+<style>
+/* ---------- facility screen ---------- */
+.app{background:var(--card);}
+.appbar-float{
+  position:absolute;top:0;left:0;right:0;z-index:30;background:transparent;border-bottom:0;
+  transition:background .2s,border-color .2s;
+}
+.appbar-float .icon-btn{background:rgba(255,255,255,.92);box-shadow:var(--sh-sm);color:var(--ink);}
+.appbar-float h1{opacity:0;transition:opacity .2s;font-size:16px;}
+.appbar-float.solid{background:var(--card);border-bottom:1px solid var(--line);}
+.appbar-float.solid h1{opacity:1;}
+.appbar-float.solid .icon-btn{background:none;box-shadow:none;}
+
+.gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;}
+.gallery::-webkit-scrollbar{display:none;}
+.gallery .photo{flex:0 0 100%;height:232px;scroll-snap-align:start;}
+.gallery-wrap{position:relative;}
+.gallery-count{
+  position:absolute;right:12px;bottom:12px;background:rgba(0,0,0,.6);color:#fff;
+  font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:var(--r-pill);
+}
+
+.fac-head{padding:16px 16px 4px;}
+.fac-head h1{font-size:21px;margin:0 0 4px;}
+.fac-head .addr{font-size:13.5px;color:var(--muted);margin:0 0 10px;}
+.fac-head .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;}
+.actions{display:flex;gap:8px;padding:0 16px 4px;}
+.actions .btn{flex:1;min-height:42px;font-size:13.5px;}
+
+.unit{
+  display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;
+  border:1.5px solid var(--line);border-radius:var(--r-md);padding:12px;margin-bottom:10px;
+  cursor:pointer;transition:border-color .15s,background .15s;
+}
+.unit.selected{border-color:var(--brand-500);background:var(--brand-050);}
+.unit-dim{
+  width:56px;height:56px;border-radius:var(--r-sm);background:var(--sand);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:var(--ink);line-height:1.15;text-align:center;
+}
+.unit h3{font-size:15px;margin:0 0 2px;}
+.unit .sub{font-size:12.5px;color:var(--muted);margin:0;}
+.unit-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+.tag{font-size:11px;font-weight:600;color:var(--body);background:var(--sand);border-radius:var(--r-pill);padding:4px 8px;}
+.unit-right{text-align:right;min-width:96px;}
+.unit-right .price-was{display:block;margin:0 0 1px;}
+.unit-left-note{display:block;font-size:11px;font-weight:700;color:#a02f22;margin-top:3px;}
+.radio-dot{
+  width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-strong);margin:6px 0 0 auto;
+}
+.unit.selected .radio-dot{border:7px solid var(--brand-500);}
+
+.amen{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px;}
+.amen span{font-size:12.5px;font-weight:600;color:var(--ink);background:var(--sand);
+  border-radius:var(--r-pill);padding:8px 12px;}
+
+.kv{padding:0 16px;}
+.kv .r{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+.kv .r:last-child{border-bottom:0;}
+.kv .r strong{flex:0 0 96px;color:var(--ink);font-size:13.5px;}
+
+#fac-map{position:relative;z-index:0;height:170px;margin:0 16px;border-radius:var(--r-md);border:1px solid var(--line);}
+
+.review{padding:16px 16px;border-top:1px solid var(--line);}
+.review:first-of-type{border-top:0;}
+.rev-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--brand-050);color:var(--brand-700);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.review p{font-size:13.5px;margin:0;}
+
+.near-row{display:flex;gap:12px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);color:inherit;}
+.near-row .photo{width:56px;height:56px;border-radius:var(--r-sm);flex-shrink:0;}
+.near-row strong{display:block;font-size:14px;color:var(--ink);}
+.near-row span{font-size:12.5px;color:var(--muted);}
+.near-row .price{margin-left:auto;font-size:15px;}
+
+.wine-note{margin:0 16px 14px;padding:16px;border-radius:var(--r-md);background:#f4f0f7;
+  border:1px solid #e3daec;font-size:13px;line-height:1.5;}
+.wine-note strong{display:block;color:var(--ink);margin-bottom:3px;}
+.wine-note ul{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0;}
+.wine-note li{font-size:11.5px;font-weight:600;background:#fff;border-radius:var(--r-pill);padding:4px 8px;color:#5b4470;}
+.elsewhere{display:flex;align-items:center;gap:12px;margin:4px 16px 8px;padding:12px;
+  border:1.5px dashed var(--line-strong);border-radius:var(--r-md);color:inherit;}
+.elsewhere .ic{width:38px;height:38px;flex-shrink:0;border-radius:var(--r-pill);background:var(--sand);
+  display:flex;align-items:center;justify-content:center;color:var(--ink);}
+.elsewhere strong{display:block;font-size:14px;color:var(--ink);}
+.elsewhere span{font-size:12.5px;color:var(--muted);}
+.elsewhere .chev{margin-left:auto;color:var(--muted);}
+.confirm{text-align:center;padding:8px 0 4px;}
+.confirm .tick{width:56px;height:56px;border-radius:50%;background:var(--brand-050);color:var(--brand-500);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="appbar appbar-float" id="topbar">
+    <button class="icon-btn" type="button" onclick="history.length>1?history.back():location.href='map.html'" aria-label="Back">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 5-7 7 7 7"/></svg>
+    </button>
+    <h1 id="bar-title">Facility</h1>
+    <button class="icon-btn" type="button" id="save-btn" aria-label="Save facility" aria-pressed="false">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 20.5S4.5 15 4.5 9.8A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8c0 5.2-7.5 10.7-7.5 10.7Z"/></svg>
+    </button>
+    <button class="icon-btn" type="button" id="signin-btn" aria-label="Sign in">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+    </button>
+    <button class="icon-btn" type="button" aria-label="Share"
+            onclick="ESA.toast('Share sheet is not wired up in this prototype.')">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3.5v11M8 7l4-3.5L16 7"/><path d="M6 12.5v6a1.5 1.5 0 0 0 1.5 1.5h9a1.5 1.5 0 0 0 1.5-1.5v-6"/></svg>
+    </button>
+  </header>
+
+  <main class="screen" id="screen">
+    <div class="gallery-wrap">
+      <div class="gallery" id="gallery"></div>
+      <span class="gallery-count" id="gallery-count">1 / 4</span>
+    </div>
+
+    <div class="fac-head">
+      <h1 id="fac-name">Facility</h1>
+      <p class="addr" id="fac-address"></p>
+      <div class="meta" id="fac-meta"></div>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-outline" id="fac-call" href="tel:+6567041030">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A15 15 0 0 1 4 5a1 1 0 0 1 1-1Z"/></svg>
+        Call
+      </a>
+      <a class="btn btn-outline" id="fac-directions" href="#" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+        Directions
+      </a>
+      <button class="btn btn-outline" type="button" id="tour-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 12 5-3v9l-5-3z"/></svg>
+        Tour
+      </button>
+    </div>
+
+    <div class="divider"></div>
+
+    <section>
+      <div class="sect"><div class="sect-head"><h2>Available units</h2></div>
+        <p style="font-size:13px;color:var(--muted);margin:-6px 0 0">Online rates, held for 7 days after you enquire.</p>
+      </div>
+      <!-- chips are built from this facility's own inventory, so a tap never
+           lands on an empty list -->
+      <div class="chip-row" id="unit-chips" role="group" aria-label="Filter by size"></div>
+      <div id="wine-note"></div>
+      <div style="padding:0 16px" id="unit-list"></div>
+      <div id="unit-elsewhere"></div>
+    </section>
+
+    <div class="divider"></div>
+
+    <div class="sect"><div class="sect-head"><h2>Facility features</h2></div></div>
+    <div class="amen" id="amenities"></div>
+
+    <div class="sect"><div class="sect-head"><h2>Hours &amp; access</h2></div></div>
+    <div class="kv">
+      <div class="r"><strong>Office</strong><span id="hours-office"></span></div>
+      <div class="r"><strong>Unit access</strong><span id="hours-access"></span></div>
+      <div class="r"><strong>Public holidays</strong><span>Office closed. Unit access is unchanged.</span></div>
+    </div>
+
+    <div class="sect"><div class="sect-head"><h2>Getting there</h2></div>
+      <p style="font-size:13.5px;margin:-6px 0 12px" id="mrt-note"></p>
+    </div>
+    <div id="fac-map" role="application" aria-label="Map showing the facility location"></div>
+    <p class="hint" style="padding:8px 16px 0">Lorry and van bays are at the rear of the building. Trolleys are free to use.</p>
+
+    <div class="divider"></div>
+
+    <div class="sect"><div class="sect-head"><h2>Reviews</h2><a href="#" onclick="ESA.toast('Full review list is not part of this prototype.');return false;">See all</a></div>
+      <p style="font-size:13.5px;margin:-6px 0 4px" id="review-summary"></p>
+    </div>
+    <div class="review">
+      <div class="rev-head"><span class="avatar" aria-hidden="true">WT</span>
+        <div><strong style="color:var(--ink);font-size:14px">Wei Ting</strong>
+          <div class="stars" aria-label="5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div></div>
+      <p>Enquired on a Sunday night and the team called me first thing Monday. Unit was clean and the aircon was already on when I moved in.</p>
+      <p class="hint">25 sq ft &middot; 3 weeks ago</p>
+    </div>
+    <div class="review">
+      <div class="rev-head"><span class="avatar" aria-hidden="true">AR</span>
+        <div><strong style="color:var(--ink);font-size:14px">Arif R.</strong>
+          <div class="stars" aria-label="4 out of 5">&#9733;&#9733;&#9733;&#9733;&#9734;</div></div></div>
+      <p>Good value and easy access at night. Lift can be slow on weekends when everyone is moving, so go on a weekday if you can.</p>
+      <p class="hint">50 sq ft &middot; 2 months ago</p>
+    </div>
+    <div class="review">
+      <div class="rev-head"><span class="avatar" aria-hidden="true">JL</span>
+        <div><strong style="color:var(--ink);font-size:14px">Joanne L.</strong>
+          <div class="stars" aria-label="5 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733;</div></div></div>
+      <p>Been renting for over a year during our reno. No hidden charges, and billing through the app is straightforward.</p>
+      <p class="hint">75 sq ft &middot; 4 months ago</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sect"><div class="sect-head"><h2>Other facilities nearby</h2></div></div>
+    <div id="nearby" style="padding-bottom:8px"></div>
+
+    <p class="hint" style="text-align:center;padding:16px 24px 24px">
+      Sample interface built for design review &mdash; rates and availability are fictional.
+    </p>
+  </main>
+
+  <div class="cta-bar">
+    <div>
+      <div class="price" id="cta-price">&mdash;</div>
+      <div class="hint" id="cta-note" style="margin:0">Select a unit</div>
+    </div>
+    <button class="btn btn-accent" type="button" id="enquire-btn" style="flex:1">Enquire now</button>
+  </div>
+
+  <!-- enquiry sheet -->
+  <div class="sheet-backdrop" id="enquiry-sheet-backdrop"></div>
+  <section class="sheet" id="enquiry-sheet" role="dialog" aria-modal="true" aria-labelledby="enquiry-title" aria-hidden="true">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <div>
+        <h2 id="enquiry-title">Enquire about this unit</h2>
+        <p class="hint" id="enquiry-sub" style="margin:2px 0 0"></p>
+      </div>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body" id="enquiry-body">
+      <form id="enquiry-form" novalidate>
+        <div class="field">
+          <label for="e-name">Name</label>
+          <input class="input" id="e-name" name="name" autocomplete="name" required>
+          <p class="error-msg">Please enter your name.</p>
+        </div>
+        <div class="field">
+          <label for="e-mobile">Mobile number</label>
+          <input class="input" id="e-mobile" name="mobile" type="tel" inputmode="tel"
+                 autocomplete="tel" placeholder="+65 9123 4567" required>
+          <p class="error-msg">Please enter a contactable number.</p>
+        </div>
+        <div class="field">
+          <label for="e-email">Email</label>
+          <input class="input" id="e-email" name="email" type="email" autocomplete="email" required>
+          <p class="error-msg">Please enter a valid email address.</p>
+        </div>
+        <div class="field">
+          <label for="e-date">Preferred move-in date</label>
+          <input class="input" id="e-date" name="date" type="date" required>
+          <p class="error-msg">Please choose a date.</p>
+        </div>
+        <p class="label">Preferred contact method</p>
+        <div style="display:flex;gap:16px;margin:0 0 18px">
+          <label class="check radio"><input type="radio" name="contact" value="WhatsApp" checked><span class="mark" aria-hidden="true"></span><span>WhatsApp</span></label>
+          <label class="check radio"><input type="radio" name="contact" value="Call"><span class="mark" aria-hidden="true"></span><span>Call</span></label>
+          <label class="check radio"><input type="radio" name="contact" value="Email"><span class="mark" aria-hidden="true"></span><span>Email</span></label>
+        </div>
+        <button class="btn btn-accent btn-block btn-lg" type="submit">Send enquiry</button>
+        <p class="hint" style="text-align:center;margin-top:12px">
+          No payment is taken now. We&rsquo;ll hold this rate for 7 days.
+        </p>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script src="assets/vendor/leaflet/leaflet.js"></script>
+<script src="assets/basemap.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/facility.js"></script>
+</body>
+</html>
