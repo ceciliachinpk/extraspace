@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#00245d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Extra Space Asia</title>
+<link rel="icon" href="assets/img/brand/logo-mark.png"><link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='9' fill='%2300245d'/><path d='M13 28.5V17.6L20 13l7 4.6v10.9' stroke='white' stroke-width='2.6' fill='none'/></svg>">
+<link rel="stylesheet" href="assets/styles.css?v=4">
+<style>
+/* ---------- home screen ---------- */
+.home-top{background:var(--brand-700);color:#fff;padding:0 16px 16px;}
+.home-top .greeting{font-size:13px;color:#c3d5ee;margin:0 0 2px;}
+.home-top h1{color:#fff;font-size:22px;margin:0 0 14px;}
+.home-top .search-field .input{border-color:transparent;box-shadow:var(--sh-sm);}
+
+.promo{
+  width:270px;border-radius:var(--r-lg);overflow:hidden;position:relative;color:#fff;
+  padding:16px;min-height:132px;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.promo .photo{position:absolute;inset:0;}
+.promo .t{position:relative;z-index:1;}
+.promo h3{color:#fff;font-size:17px;margin:0 0 4px;}
+.promo p{font-size:13px;color:#dbe6f5;margin:0 0 10px;line-height:1.4;}
+.promo .go{font-size:13px;font-weight:700;color:#fff;text-decoration:underline;}
+
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;}
+.quick a{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 4px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);
+  font-size:11.5px;font-weight:600;color:var(--ink);text-align:center;line-height:1.25;}
+.quick .ic{width:38px;height:38px;border-radius:var(--r-pill);background:var(--brand-050);
+  color:var(--brand-500);display:flex;align-items:center;justify-content:center;}
+
+.fac-card{width:248px;border-radius:var(--r-lg);overflow:hidden;background:var(--card);
+  border:1px solid var(--line);box-shadow:var(--sh-sm);color:inherit;display:block;}
+.fac-card .photo{height:104px;}
+.fac-card .b{display:block;padding:12px 12px 16px;}
+.fac-card h3{margin:0 0 2px;font-size:15px;}
+.fac-card .addr{display:block;font-size:12.5px;color:var(--muted);margin:0 0 8px;}
+.fac-card .row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;}
+
+.size-card{width:150px;padding:16px;border-radius:var(--r-md);background:var(--card);
+  border:1px solid var(--line);color:inherit;display:block;}
+.size-vis{height:44px;display:flex;align-items:flex-end;gap:4px;margin-bottom:10px;}
+.size-vis i{flex:1;border-radius:3px 3px 0 0;background:var(--brand-050);}
+.size-vis i:last-child{background:var(--brand-500);}
+.size-card h3{font-size:15px;margin:0 0 1px;}
+.size-card .sq{display:block;font-size:11px;font-weight:700;color:var(--brand-500);text-transform:uppercase;letter-spacing:.06em;}
+.size-card p{font-size:12px;margin:6px 0 10px;line-height:1.35;color:var(--muted);}
+
+.rows{padding:0 16px;}
+.row-link{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);color:inherit;}
+.rows .row-link:last-child{border-bottom:0;}
+.row-link .ic{width:42px;height:42px;flex-shrink:0;border-radius:var(--r-md);background:var(--sand);
+  color:var(--ink);display:flex;align-items:center;justify-content:center;}
+.row-link strong{display:block;font-size:14.5px;color:var(--ink);}
+.row-link > span:nth-child(2){flex:1;}
+.row-link span{font-size:12.5px;color:var(--muted);}
+.row-link .chev{margin-left:auto;color:var(--muted);}
+
+.unit-card{margin:14px 16px 0;padding:16px;border-radius:var(--r-lg);background:var(--card);
+  border:1px solid var(--line);box-shadow:var(--sh-sm);}
+.unit-card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.unit-card h2{font-size:16px;margin:0 0 2px;}
+.unit-card .sub{font-size:12.5px;color:var(--muted);margin:0;}
+.unit-card .due{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  margin:14px 0 0;padding:12px 0 0;border-top:1px solid var(--line);font-size:13px;}
+.unit-card .btns{display:flex;gap:8px;margin:14px 0 0;}
+.unit-card .btns .btn{flex:1;min-height:42px;font-size:13.5px;}
+.help{margin:0 16px;padding:16px;border-radius:var(--r-lg);background:var(--ink);color:#d8d8d6;}
+.help h3{color:#fff;margin:0 0 4px;font-size:16px;}
+.help p{font-size:13px;margin:0 0 14px;}
+.help .btns{display:flex;gap:8px;}
+.help .btn{flex:1;min-height:44px;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- brand splash: visible for under a second, then fades -->
+  <div class="splash" id="splash" aria-hidden="true">
+    <img class="splash-lockup" src="assets/img/brand/logo-lockup.png" alt="Extra Space self storage">
+  </div>
+
+
+  <header class="appbar appbar-brand">
+    <img class="logo-lockup" src="assets/img/brand/logo-lockup.png" alt="Extra Space self storage" height="30">
+    </span>
+    <button class="market-btn" type="button" id="market-btn" style="margin-left:auto;color:#fff">
+      <span class="flag" aria-hidden="true">🇸🇬</span><span id="market-name">Singapore</span>
+      <svg width="12" height="12" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m1 1.8 5 4.4 5-4.4"/></svg>
+    </button>
+    <span class="bell-wrap">
+      <button class="icon-btn" type="button" id="bell" aria-label="Notifications">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2 7.5-2 7.5h16s-2-1.5-2-7.5Z"/><path d="M10.5 19.5a2 2 0 0 0 3 0"/></svg>
+      </button>
+      <span class="bell-dot" id="bell-dot" hidden></span>
+    </span>
+  </header>
+
+  <main class="screen screen-pad" id="main">
+
+    <div class="home-top">
+      <p class="greeting" id="greeting">Good afternoon</p>
+      <h1>Find storage near you</h1>
+      <a class="search-field" href="map.html" style="display:block">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input class="input" type="search" placeholder="Search area, MRT or facility" readonly
+               aria-label="Search for a facility" tabindex="-1">
+      </a>
+    </div>
+
+    <div id="notif-slot"></div>
+    <div id="account-block"></div>
+
+    <div class="sect" style="padding-top:16px">
+      <div class="sect-head"><h2>Promotions</h2><a href="#" onclick="ESA.toast('Promotions list is not part of this prototype.');return false;">See all</a></div>
+    </div>
+    <div class="hscroll" id="promos"></div>
+
+    <nav class="quick" aria-label="Quick actions">
+      <a href="map.html">
+        <span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
+        Find storage
+      </a>
+      <a href="account.html">
+        <span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/></svg></span>
+        My unit
+      </a>
+      <a href="account.html?reason=pay">
+        <span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span>
+        Pay bill
+      </a>
+      <a href="estimator.html">
+        <span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 7h16M4 12h11M4 17h6"/></svg></span>
+        Size guide
+      </a>
+    </nav>
+
+    <div class="sect">
+      <div class="sect-head"><h2>Facilities near you</h2><a href="map.html">View map</a></div>
+    </div>
+    <div class="hscroll" id="near"></div>
+
+    <div class="divider"></div>
+
+    <div class="sect">
+      <div class="sect-head"><h2>What size do you need?</h2><a href="estimator.html">Estimate my size</a></div>
+      <p style="font-size:13.5px;margin:-6px 0 12px;color:var(--muted)">Tap a size to see the facilities that have it available.</p>
+    </div>
+    <div class="hscroll" id="sizes"></div>
+
+    <div class="sect">
+      <div class="sect-head"><h2>Storage types</h2></div>
+    </div>
+    <div class="rows">
+      <a class="row-link" href="map.html?type=aircon">
+        <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M4.2 7.5 19.8 16.5M19.8 7.5 4.2 16.5"/></svg></span>
+        <span><strong>Air-conditioned units</strong><span>For clothing, documents, electronics and wood</span></span>
+        <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="row-link" href="map.html?type=nonaircon">
+        <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="6" width="17" height="13" rx="1.5"/><path d="M3.5 10h17M8 19v-9M16 19v-9"/></svg></span>
+        <span><strong>Non air-conditioned units</strong><span>The lowest rates, for hardy household items</span></span>
+        <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="row-link" href="map.html?type=wine">
+        <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8.5 3h7l-.6 6a2.9 2.9 0 0 1-5.8 0Z"/><path d="M12 12v7M9 21h6"/></svg></span>
+        <span><strong>Wine storage</strong><span>Lockers held at 13&ndash;15&deg;C with 70% humidity</span></span>
+        <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 5 7 7-7 7"/></svg></span>
+      </a>
+      <a class="row-link" href="map.html?type=business">
+        <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></span>
+        <span><strong>Business storage</strong><span>Inventory, files and equipment with loading bays</span></span>
+        <span class="chev" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+
+    <div class="sect" id="help"><div class="sect-head"><h2>Need a hand?</h2></div></div>
+    <div class="help">
+      <h3>Talk to the storage team</h3>
+      <p>Tell us what you&rsquo;re storing and we&rsquo;ll recommend a size &mdash; usually within an hour during office hours.</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="tel:+6567041030">Call us</a>
+        <button class="btn btn-outline" type="button" style="color:#fff;border-color:rgba(255,255,255,.4)"
+                onclick="ESA.toast('WhatsApp hand-off is not wired up in this prototype.')">WhatsApp</button>
+      </div>
+    </div>
+
+    <p class="hint" style="text-align:center;padding:24px 24px 0">
+      Sample interface built for design review &mdash; not an official Extra Space Asia app.
+    </p>
+  </main>
+
+  <nav class="tabbar" aria-label="Main">
+    <a href="home.html" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z"/></svg>
+      Home
+    </a>
+    <a href="map.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+      Locations
+    </a>
+    <a href="account.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M3.5 12h17M9 7.5V5h6v2.5"/></svg>
+      My storage
+    </a>
+    <a href="profile.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+      Account
+    </a>
+  </nav>
+
+  <!-- notifications -->
+  <div class="sheet-backdrop" id="notif-sheet-backdrop"></div>
+  <section class="sheet" id="notif-sheet" role="dialog" aria-modal="true" aria-labelledby="notif-title" aria-hidden="true">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="notif-title">Notifications</h2>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body"><div id="notif-list"></div></div>
+  </section>
+
+  <!-- market picker -->
+  <div class="sheet-backdrop" id="market-sheet-backdrop"></div>
+  <section class="sheet" id="market-sheet" role="dialog" aria-modal="true" aria-labelledby="market-sheet-title" aria-hidden="true">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="market-sheet-title">Choose your country</h2>
+      <button class="icon-btn" type="button" data-sheet-close aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body"><div class="rows" style="padding:0" id="market-list"></div></div>
+  </section>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  var h = new Date().getHours();
+  var part = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+  var user = ESA.session();
+  document.getElementById("greeting").textContent =
+    user && user.name ? part + ", " + user.name.split(" ")[0] : part;
+
+  /* Signing in has to be worth it: show the unit, the invoice and the gate
+     code right here rather than behind another tap. */
+  if (user) {
+    var home = window.ESA_FACILITIES[1];   /* demo: this customer rents at Kallang */
+    document.getElementById("account-block").innerHTML =
+      '<section class="unit-card" id="your-unit">' +
+        '<div class="top">' +
+          '<div><h2>Unit 04-118 &middot; 50 sq ft</h2>' +
+          '<p class="sub">' + home.name + ' &middot; air-conditioned</p></div>' +
+          '<span class="badge">Active</span>' +
+        '</div>' +
+        '<div class="due"><span>Next invoice &middot; due 1 Oct</span>' +
+          '<strong style="color:var(--ink);font-size:16px">' + ESA.money(189) + '</strong></div>' +
+        '<div class="btns">' +
+          '<a class="btn btn-accent" href="account.html?reason=pay">Pay now</a>' +
+          '<a class="btn btn-outline" href="account.html?reason=gate">Access code</a>' +
+        '</div>' +
+      '</section>';
+
+    if (window.location.hash === "#your-unit") {
+      document.getElementById("your-unit").scrollIntoView({ block: "center" });
+    }
+  }
+
+  /* ---- notifications ---- */
+  var NOTIF_ICONS = {
+    payment: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>',
+    access:  '<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+    promo:   '<path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/>'
+  };
+  var svgIcon = function (kind, size) {
+    return '<svg width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" ' +
+      'fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">' +
+      (NOTIF_ICONS[kind] || NOTIF_ICONS.promo) + '</svg>';
+  };
+  /* Notifications about a booking only make sense once you're signed in. */
+  var notifs = ESA.session()
+    ? window.ESA_NOTIFICATIONS
+    : window.ESA_NOTIFICATIONS.filter(function (n) { return n.kind === "promo"; });
+  var dismissed = window.sessionStorage.getItem("esa_notif_dismissed") === "1";
+
+  var unread = notifs.filter(function (n) { return n.unread; }).length;
+  document.getElementById("bell-dot").hidden = unread === 0;
+
+  document.getElementById("notif-list").innerHTML = notifs.length
+    ? notifs.map(function (n) {
+        return '<div class="notif-item' + (n.unread ? " unread" : "") + '">' +
+          '<span class="ic">' + svgIcon(n.kind) + '</span>' +
+          '<div><strong>' + n.title + '</strong><p>' + n.body + '</p>' +
+          '<a href="' + n.href + '">' + n.cta + '</a>' +
+          '<span class="when">' + n.when + '</span></div></div>';
+      }).join("")
+    : '<p class="hint" style="padding:8px 0 16px">Nothing new right now.</p>';
+
+  var notifSheet = ESA.sheet("notif-sheet");
+  document.getElementById("bell").addEventListener("click", notifSheet.open);
+
+  /* the small in-app reminder the payment notice deserves on the home screen */
+  var due = notifs.filter(function (n) { return n.kind === "payment"; })[0];
+  if (due && !dismissed) {
+    document.getElementById("notif-slot").innerHTML =
+      '<div class="notif-banner" role="status">' +
+        '<span class="ic">' + svgIcon("payment", 17) + '</span>' +
+        '<div style="flex:1"><strong>' + due.title + '</strong><p>' + due.body + '</p>' +
+        '<div class="act"><a href="' + due.href + '">' + due.cta + '</a>' +
+        '<button type="button" id="notif-dismiss">Dismiss</button></div></div>' +
+      '</div>';
+    document.getElementById("notif-dismiss").addEventListener("click", function () {
+      window.sessionStorage.setItem("esa_notif_dismissed", "1");
+      document.getElementById("notif-slot").innerHTML = "";
+    });
+  }
+
+  /* promotions */
+  document.getElementById("promos").innerHTML = window.ESA_PROMOS.map(function (p) {
+    return '<a class="promo" href="map.html">' +
+      '<span class="photo ' + p.tone + '" aria-hidden="true"></span>' +
+      '<span class="t"><h3>' + p.title + '</h3><p>' + p.body + '</p>' +
+      '<span class="go">' + p.cta + '</span></span></a>';
+  }).join("");
+
+  /* nearby facilities */
+  document.getElementById("near").innerHTML = window.ESA_FACILITIES.slice(0, 4).map(function (f) {
+    var from = Math.min.apply(null, f.units.map(function (u) { return u.price; }));
+    return '<a class="fac-card" href="facility.html?id=' + f.id + '">' +
+      ESA.photo(f.img, f.photo,
+        f.promo ? '<span class="badge badge-promo" style="position:absolute;left:10px;top:10px">' + f.promo + '</span>' : '') +
+      '<span class="b"><h3>' + f.name + '</h3>' +
+      '<span class="addr">' + f.mrt + ' &middot; ' + f.distance.toFixed(1) + ' km</span>' +
+      '<span class="row"><span class="price">' + ESA.money(from) + '<small>/mo</small></span>' +
+      '<span class="rating"><span class="stars" aria-hidden="true">&#9733;</span>' + f.rating.toFixed(1) + '</span>' +
+      '</span></span></a>';
+  }).join("");
+
+  /* size guide */
+  var estimatorCard =
+    '<a class="size-card" href="estimator.html" style="background:var(--brand-050);border-color:var(--brand-100, var(--line))">' +
+      '<span class="size-vis" aria-hidden="true" style="align-items:center;justify-content:center">' +
+        '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--brand-500)" stroke-width="1.7">' +
+        '<path d="M4 7.5h16v9H4z"/><path d="M8 7.5v3M12 7.5v4.5M16 7.5v3"/></svg></span>' +
+      '<span class="sq">Not sure?</span><h3>Estimate</h3>' +
+      '<p>Answer a couple of questions and we&rsquo;ll size it for you.</p>' +
+      '<span class="price" style="font-size:14px;color:var(--brand-500)">Open estimator</span></a>';
+
+  document.getElementById("sizes").innerHTML = window.ESA_SIZES.map(function (s) {
+    return '<a class="size-card" href="map.html?size=' + s.cat + '">' +
+      '<span class="size-vis" aria-hidden="true"><i style="height:36%"></i><i style="height:56%"></i><i style="height:74%"></i><i style="height:96%"></i></span>' +
+      '<span class="sq">' + s.label + '</span><h3>' + s.size + '</h3>' +
+      '<p>' + s.blurb + '</p>' +
+      '<span class="price" style="font-size:16px">' + ESA.money(s.from) + '<small>/mo</small></span></a>';
+  }).join("") + estimatorCard;
+
+  /* market picker */
+  var marketSheet = ESA.sheet("market-sheet");
+  document.getElementById("market-btn").addEventListener("click", marketSheet.open);
+  document.getElementById("market-list").innerHTML = window.ESA_MARKETS.map(function (m) {
+    return '<button class="row-link" type="button" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer" data-code="' + m.code + '">' +
+      '<span class="ic" aria-hidden="true" style="font-size:20px">' + m.flag + '</span>' +
+      '<span><strong>' + m.name + '</strong><span>' + m.cities + '</span></span>' +
+      (m.code === "sg" ? '<span class="chev" style="color:var(--brand-500)" aria-hidden="true">&#10003;</span>' : '<span class="chev" aria-hidden="true">&rsaquo;</span>') +
+      '</button>';
+  }).join("");
+  document.getElementById("market-list").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-code]");
+    if (!b) return;
+    marketSheet.close();
+    if (b.dataset.code !== "sg") ESA.toast("Malaysia inventory isn\u2019t loaded in this prototype.");
+  });
+})();
+</script>
+</body>
+</html>

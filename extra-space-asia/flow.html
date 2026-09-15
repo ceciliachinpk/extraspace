@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Extra Space Asia — journey write-up</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="assets/img/brand/logo-mark.png">
+<style>
+  :root{
+    --brand-700:#00245d; --brand-500:#0b4da2; --brand-400:#3c78c8; --brand-050:#eaf1fa;
+    --accent-500:#d82424; --ink:#252525; --muted:#5f6672; --line:#e2e6ec;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:#f4f6f9;color:var(--ink);
+    font:16px/1.62 "Inter","Helvetica Neue",-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{max-width:760px;margin:0 auto;background:#fff;padding:56px 64px 72px;min-height:100vh;}
+  .mast{display:flex;align-items:center;gap:16px;padding:0 0 24px;border-bottom:2px solid var(--brand-700);}
+  .mast img{height:34px;width:auto;}
+  .mast div{flex:1;}
+  h1{margin:24px 0 4px;font-size:26px;letter-spacing:-.02em;line-height:1.2;}
+  .sub{margin:0 0 36px;color:var(--muted);font-size:14px;}
+  h2{
+    margin:40px 0 4px;font-size:12px;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--brand-500);
+  }
+  h2 + p.lede{margin:0 0 20px;color:var(--muted);font-size:14px;font-style:italic;}
+  .step{margin:0 0 22px;padding:0 0 0 18px;border-left:3px solid var(--brand-050);}
+  .step h3{margin:0 0 4px;font-size:16px;}
+  .step h3 .n{color:var(--brand-400);font-variant-numeric:tabular-nums;margin-right:6px;}
+  .step p{margin:0;}
+  .step p + p{margin-top:8px;}
+  ul.tight{margin:8px 0 0;padding-left:20px;}
+  ul.tight li{margin:3px 0;}
+  .note{
+    background:var(--brand-050);border-left:3px solid var(--brand-500);
+    padding:14px 18px;margin:32px 0 0;font-size:14px;border-radius:0 10px 10px 0;
+  }
+  .note b{color:var(--brand-700);}
+  .red{color:var(--accent-500);font-weight:600;}
+  footer{margin:48px 0 0;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;}
+  .back{display:inline-block;margin:0 0 24px;font-size:13px;color:var(--brand-500);text-decoration:none;}
+
+  @media print{
+    body{background:#fff;}
+    .sheet{max-width:none;padding:0;min-height:0;}
+    .back{display:none;}
+    .step{break-inside:avoid;}
+    h2{break-after:avoid;}
+    @page{margin:18mm;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <a class="back" href="index.html">← Back to the prototype</a>
+
+  <div class="mast">
+    <img src="assets/img/brand/logo-lockup.png" alt="Extra Space Asia" style="filter:none;background:var(--brand-700);padding:6px 10px;border-radius:8px">
+    <div>
+      <strong style="font-size:13px">Extra Space Asia</strong><br>
+      <span style="font-size:12px;color:var(--muted)">Personal storage app · proposal review</span>
+    </div>
+  </div>
+
+  <h1>The journey, splash screen to move-out</h1>
+  <p class="sub">24 screens · iPhone 17 (402 × 874) · Singapore &amp; Malaysia</p>
+
+  <h2>Entry</h2>
+  <div class="step">
+    <h3><span class="n">01</span>Splash</h3>
+    <p>The brand holds for 800&nbsp;ms, then cross-fades away. It never delays the
+    customer; by the time they have focused on the screen, they are home.</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">02</span>Home</h3>
+    <p>One screen, two intents. A returning customer sees their unit, the invoice due
+    in five days and a <span class="red">red Pay now</span>. A new customer sees
+    search, promotions and four quick actions — Find storage, My unit, Pay bill,
+    Size guide. Facilities near them sit below, with real branch photography.</p>
+  </div>
+
+  <h2>Find</h2>
+  <p class="lede">How much space, and then where.</p>
+  <div class="step">
+    <h3><span class="n">03</span>Size estimator</h3>
+    <p>The answer to the first question a personal customer actually has. Either pick
+    a home size — a few boxes through to a five-room flat — or add items one by one
+    from a 35-item catalogue.</p>
+    <p>It computes volume in cubic feet, models each unit at 8&nbsp;ft stacking height
+    and 70&nbsp;% packing efficiency, then recommends a size with a fill gauge, a
+    from-price, and honest advice: a comfortable fit, or “you are near the limit, the
+    next size up gives you room to walk in”. The CTA carries that recommendation
+    into Locations as a pre-set filter.</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">04</span>Locations</h3>
+    <p>A map with price pins, filter chips — size, air-conditioned, wine, 24/7 — and a
+    results sheet. Tapping a pin or a row <em>dives in</em>: the map flies to the
+    branch and the thumbnail grows into the facility hero.</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">05–09</span>Facility</h3>
+    <p>Each branch has its own photography, rating, promotion, access hours and unit
+    list with live prices. Wine storage carries its own explainer — 13–15&nbsp;°C,
+    70&nbsp;% humidity — at the branches that have it. Where a size is not stocked,
+    the screen points to the nearest branch that has it rather than dead-ending.</p>
+    <p>A sticky <span class="red">Enquire now</span> follows the customer down the
+    page, and sign-in is always one tap away in the app bar.</p>
+  </div>
+
+  <h2>Convert</h2>
+  <div class="step">
+    <h3><span class="n">10–11</span>Enquire</h3>
+    <p>Name, mobile, email, preferred move-in date and contact method, shown as step 1
+    of 2. Confirmation gives a reference number and holds the rate for seven days.</p>
+    <p>A guest can do all of this without an account — nothing is gated until there is
+    something of theirs to protect.</p>
+  </div>
+
+  <h2>Sign in</h2>
+  <div class="step">
+    <h3><span class="n">12</span>My storage · login wall</h3>
+    <p>The gate, and it explains itself. A blurred peek of the customer’s own unit card
+    sits behind a lock, the headline names the reason they hit it — pay an invoice,
+    see an access code — and three benefits sit below. Guests can keep browsing.</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">13–15</span>Sign in</h3>
+    <p>Mobile number, then a six-digit code, then a verifying state that auto-advances.
+    Steps 1–3 are shown throughout. No password required; password is the fallback,
+    not the front door. Wherever the customer signed in from, that is where they land
+    back.</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">16</span>My storage</h3>
+    <p>Every booking in one list — the 50&nbsp;sq&nbsp;ft unit and the wine locker,
+    each with its next invoice — plus billing and past bookings.</p>
+  </div>
+
+  <h2>Manage</h2>
+  <div class="step">
+    <h3><span class="n">17</span>Booking detail</h3>
+    <p>The lease in plain terms: started, renews, term, monthly rate. Then the three
+    things customers come for.</p>
+    <ul class="tight">
+      <li><b>18 · Access code</b> — revealed for 30 seconds with a visible countdown, then hidden again.</li>
+      <li><b>19 · Extend</b> — 6 or 12 months, with the rate lock explained and 5&nbsp;% off for committing to a year.</li>
+      <li><b>20–21 · Pay</b> — amount, invoice number, GIRO or card, then a receipt.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3><span class="n">22</span>Move-out</h3>
+    <p>The termination path. Ten days’ notice is enforced by the date picker, a reason
+    is asked, and the customer must acknowledge emptying the unit by 6&nbsp;pm.</p>
+    <p>The booking then shows “Move-out scheduled”, the modify options disappear, the
+    final invoice is pro-rated, and it can be cancelled any time before the date.</p>
+  </div>
+  <div class="step">
+    <h3><span class="n">23–24</span>Wine locker &amp; profile</h3>
+    <p>A second booking on the same account, and the profile: contact details,
+    notification toggles, payment methods, security.</p>
+  </div>
+
+  <div class="note">
+    <b>Prototype notes.</b> 24 screens, 133 connections, every transition a cross-fade.
+    Two flow starting points — <i>1 · Personal storage journey</i> from the splash and
+    <i>2 · Sign-in flow</i> from the wall. Step indicators on both multi-step flows.
+    Padding on a 4&nbsp;px grid throughout, drawn from a shared component library.
+  </div>
+
+  <footer>
+    Extra Space Asia — personal storage app · prepared for proposal review.<br>
+    Print this page to PDF for a written companion to the clickable prototype.
+  </footer>
+
+</div>
+</body>
+</html>

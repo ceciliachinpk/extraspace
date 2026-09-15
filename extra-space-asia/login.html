@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#00245d">
+<title>Sign in | Extra Space Asia</title>
+<link rel="icon" href="assets/img/brand/logo-mark.png"><link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' rx='9' fill='%2300245d'/><path d='M13 28.5V17.6L20 13l7 4.6v10.9' stroke='white' stroke-width='2.6' fill='none'/></svg>">
+<link rel="stylesheet" href="assets/styles.css?v=4">
+<style>
+/* ---------- login screen ---------- */
+.app{background:var(--brand-700);}
+.screen{background:transparent;display:flex;flex-direction:column;}
+.login-top{flex:0 0 auto;}
+.login-body{flex:1 1 auto;}
+.login-top{background:var(--brand-700);color:#fff;padding:16px 20px 32px;}
+.login-top .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;}
+.market-pill{
+  display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);color:#fff;
+  border:0;border-radius:var(--r-pill);padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;
+}
+.login-top h1{color:#fff;font-size:25px;margin:0 0 6px;}
+.login-top p{color:#c3d5ee;font-size:14.5px;margin:0;max-width:32ch;}
+
+.login-body{
+  background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:8px 20px calc(28px + var(--safe-b));min-height:62%;
+}
+.seg{display:flex;background:var(--sand);border-radius:var(--r-pill);padding:4px;margin:12px 0 22px;}
+.seg button{
+  flex:1;background:none;border:0;border-radius:var(--r-pill);padding:12px 8px;
+  font-size:14.5px;font-weight:700;color:var(--body);cursor:pointer;transition:background .15s,color .15s;
+}
+.seg button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:var(--sh-sm);}
+
+.label-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.label-row label{font-size:13.5px;font-weight:700;color:var(--ink);}
+.label-row a{font-size:12.5px;font-weight:700;}
+.biometric{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:none;
+  border:1.5px solid var(--line-strong);border-radius:var(--r-pill);min-height:48px;
+  font-size:14.5px;font-weight:700;color:var(--ink);cursor:pointer;
+}
+.switch-note{text-align:center;font-size:13.5px;margin:18px 0 0;}
+.perks{margin:16px 0 0;font-size:13px;color:var(--body);}
+.perks li{display:flex;gap:8px;padding:4px 0;}
+.perks svg{flex-shrink:0;color:var(--brand-500);margin-top:2px;}
+.pw-meter{display:flex;gap:4px;margin:8px 0 0;}
+.pw-meter i{flex:1;height:4px;border-radius:2px;background:var(--line);transition:background .2s;}
+.pw-meter.s1 i:nth-child(1){background:#d64c3c;}
+.pw-meter.s2 i:nth-child(-n+2){background:var(--amber);}
+.pw-meter.s3 i:nth-child(-n+3){background:#5bb37e;}
+.pw-meter.s4 i{background:var(--green);}
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="screen" id="main">
+
+    <div class="login-top">
+      <div class="row">
+        <button class="icon-btn" type="button" id="back-btn" aria-label="Back" style="color:#fff;margin-left:-8px">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 5-7 7 7 7"/></svg>
+        </button>
+        <button class="market-pill" type="button" onclick="ESA.toast('Singapore and Malaysia only &mdash; Malaysia inventory isn&rsquo;t loaded here.')">
+          <span aria-hidden="true">🇸🇬</span> Singapore
+          <svg width="11" height="11" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m1 1.8 5 4.4 5-4.4"/></svg>
+        </button>
+      </div>
+      <img class="logo-lockup" src="assets/img/brand/logo-lockup.png" alt="Extra Space self storage" height="30">
+      </span>
+      <h1 id="top-title">Welcome back</h1>
+      <p id="top-sub">No password needed &mdash; we&rsquo;ll text you a one-time code.</p>
+    </div>
+
+    <div class="login-body">
+      <div class="seg" role="tablist" aria-label="Account" id="seg">
+        <button type="button" role="tab" id="tab-signin" aria-selected="true" aria-controls="step-identity">Sign in</button>
+        <button type="button" role="tab" id="tab-create" aria-selected="false" aria-controls="step-register">Register</button>
+      </div>
+
+      <!-- ============ step 1: identity ============ -->
+      <section id="step-identity" role="tabpanel" aria-labelledby="tab-signin">
+        <button class="known" type="button" id="known-user" hidden>
+          <span class="av" id="known-initials" aria-hidden="true">CC</span>
+          <span><strong id="known-name">Continue</strong><span id="known-mobile"></span></span>
+          <span class="go" aria-hidden="true">Continue</span>
+        </button>
+
+        <form id="otp-request-form" novalidate>
+          <div class="field">
+            <label for="mobile">Mobile number</label>
+            <div class="phone-field">
+              <span class="phone-prefix" aria-hidden="true">🇸🇬 +65</span>
+              <input class="input" id="mobile" name="mobile" type="tel" inputmode="numeric"
+                     autocomplete="tel-national" placeholder="9123 4567" maxlength="9" required>
+            </div>
+            <p class="error-msg">Enter the 8-digit mobile number on your account.</p>
+            <p class="hint">We&rsquo;ll send a 6-digit code by SMS or WhatsApp.</p>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Send me a code</button>
+        </form>
+
+        <button class="biometric" type="button" id="faceid" style="margin-top:12px" hidden>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+            <path d="M4 8.5V6a2 2 0 0 1 2-2h2.5M15.5 4H18a2 2 0 0 1 2 2v2.5M20 15.5V18a2 2 0 0 1-2 2h-2.5M8.5 20H6a2 2 0 0 1-2-2v-2.5"/>
+            <path d="M9 10v1.5M15 10v1.5M9.5 15c1.5 1.2 3.5 1.2 5 0"/></svg>
+          Sign in with Face ID
+        </button>
+
+        <button class="textlink" type="button" id="use-password">Use email and password instead</button>
+
+        <div class="or">or</div>
+        <a class="btn btn-outline btn-block" href="map.html">Keep browsing as a guest</a>
+
+        <ul class="perks">
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg> Pay invoices and set up GIRO</li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg> Get your gate access code any time</li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg> Transfer to a bigger unit without a store visit</li>
+        </ul>
+        <p class="legal">Sample interface built for design review. Nothing is sent anywhere &mdash; this screen only demonstrates the states.</p>
+      </section>
+
+      <!-- ============ step 2: one-time code ============ -->
+      <section id="step-otp" hidden aria-labelledby="otp-heading">
+        <h2 id="otp-heading" style="font-size:18px;margin:0 0 4px">Enter your code</h2>
+        <p style="font-size:13.5px;margin:0 0 18px">Sent to <strong id="otp-target" style="color:var(--ink)"></strong>.
+          <button class="textlink inline" type="button" id="change-number">Change</button></p>
+
+        <div class="alert" id="otp-alert" role="alert">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:1px" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle><path d="M12 8v4.5M12 16h.01"></path></svg>
+          <span id="otp-alert-text">That code didn&rsquo;t match. Check the SMS and try again.</span>
+        </div>
+
+        <form id="otp-form" novalidate>
+          <label class="label" for="otp-1">6-digit code</label>
+          <div class="otp" id="otp-inputs">
+            <input id="otp-1" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1">
+            <input id="otp-2" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+            <input id="otp-3" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+            <input id="otp-4" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+            <input id="otp-5" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5">
+            <input id="otp-6" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6">
+          </div>
+          <div class="resend">
+            <span id="resend-note">Didn&rsquo;t get it?</span>
+            <button type="button" id="resend-btn" disabled>Resend in 30s</button>
+          </div>
+          <p class="demo-code">Prototype: any 6 digits sign you in, or use <strong>123456</strong>.
+            Entering fewer than 6 shows the error state.</p>
+          <button class="btn btn-primary btn-block btn-lg" type="submit" style="margin-top:18px">Verify and continue</button>
+        </form>
+        <button class="textlink" type="button" id="otp-to-password">Use email and password instead</button>
+      </section>
+
+      <!-- ============ step 3: password fallback ============ -->
+      <section id="step-password" hidden aria-labelledby="pw-heading">
+        <h2 id="pw-heading" style="font-size:18px;margin:0 0 18px">Sign in with a password</h2>
+
+        <div class="alert" id="signin-alert" role="alert">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;margin-top:1px" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle><path d="M12 8v4.5M12 16h.01"></path></svg>
+          <span id="signin-alert-text">Check your email and password and try again.</span>
+        </div>
+
+        <form id="signin-form" novalidate>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input class="input" id="email" name="email" type="email" inputmode="email"
+                   autocomplete="username" placeholder="you@example.com" required>
+            <p class="error-msg">Enter the email address on your account.</p>
+          </div>
+          <div class="field">
+            <div class="label-row">
+              <label for="password">Password</label>
+              <a href="#reset" id="forgot">Forgot?</a>
+            </div>
+            <div class="input-group">
+              <input class="input" id="password" name="password" type="password"
+                     autocomplete="current-password" required>
+              <button class="input-affix" type="button" data-reveal="password" aria-label="Show password">Show</button>
+            </div>
+            <p class="error-msg">Enter your password.</p>
+          </div>
+          <label class="check" style="margin:2px 0 20px">
+            <input type="checkbox" name="remember" checked>
+            <span class="mark" aria-hidden="true"></span>
+            <span>Keep me signed in on this device</span>
+          </label>
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Sign in</button>
+        </form>
+        <button class="textlink" type="button" id="back-to-otp">Text me a code instead</button>
+      </section>
+
+      <!-- ============ register ============ -->
+      <section id="step-register" role="tabpanel" aria-labelledby="tab-create" hidden>
+        <form id="create-form" novalidate>
+          <div class="field">
+            <label for="c-name">Full name</label>
+            <input class="input" id="c-name" name="name" autocomplete="name" required>
+            <p class="error-msg">Enter your name as it appears on your lease.</p>
+          </div>
+          <div class="field">
+            <label for="c-mobile">Mobile number</label>
+            <div class="phone-field">
+              <span class="phone-prefix" aria-hidden="true">🇸🇬 +65</span>
+              <input class="input" id="c-mobile" name="mobile" type="tel" inputmode="numeric"
+                     autocomplete="tel-national" placeholder="9123 4567" maxlength="9" required>
+            </div>
+            <p class="error-msg">Enter an 8-digit mobile number.</p>
+          </div>
+          <div class="field">
+            <label for="c-email">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+            <input class="input" id="c-email" name="email" type="email" autocomplete="email">
+            <p class="hint">For invoices and receipts. You can add it later.</p>
+          </div>
+          <div class="field">
+            <label for="c-unit">Unit number <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+            <input class="input" id="c-unit" name="unit" placeholder="e.g. 04-118">
+            <p class="hint">Links your account to your unit straight away.</p>
+          </div>
+          <label class="check" style="margin:4px 0 8px">
+            <input type="checkbox" name="terms" required>
+            <span class="mark" aria-hidden="true"></span>
+            <span>I agree to the <a href="#" onclick="ESA.toast('Terms of use — out of scope for the prototype');return false">terms of use</a> and <a href="#" onclick="ESA.toast('Privacy policy — out of scope for the prototype');return false">privacy policy</a>.</span>
+          </label>
+          <p class="error-msg" id="terms-error">Please accept the terms to continue.</p>
+          <label class="check" style="margin:10px 0 20px">
+            <input type="checkbox" name="offers">
+            <span class="mark" aria-hidden="true"></span>
+            <span>Send me promotions and storage tips.</span>
+          </label>
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Create account</button>
+          <p class="hint" style="text-align:center;margin-top:12px">
+            No password to choose &mdash; we&rsquo;ll verify your number with a code.
+          </p>
+        </form>
+        <p class="switch-note">Already registered? <a href="#" id="go-signin">Sign in</a></p>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/login.js"></script>
+</body>
+</html>

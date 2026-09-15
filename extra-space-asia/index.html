@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Extra Space Asia — personal storage app prototype</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="assets/img/brand/logo-mark.png">
+<style>
+  :root{
+    --brand-800:#001a44; --brand-700:#00245d; --brand-600:#083c80; --brand-500:#0b4da2;
+    --brand-400:#3c78c8; --brand-050:#eaf1fa;
+    --accent-500:#d82424;
+    --ink:#252525; --muted:#5f6672; --line:#e2e6ec; --card:#fff; --bg:#f4f6f9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.5 "Inter","Helvetica Neue",-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brand-500);}
+
+  /* ---------- masthead ---------- */
+  header{
+    background:var(--brand-700); color:#fff;
+    padding:20px 32px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  header img{height:32px;width:auto;display:block;}
+  header .titles{flex:1;min-width:240px;}
+  header h1{margin:0;font-size:18px;font-weight:700;letter-spacing:-.01em;}
+  header p{margin:2px 0 0;font-size:13px;color:#b8c9e4;}
+  .tag{
+    font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.24);
+    padding:6px 12px; border-radius:999px; color:#dbe6f5;
+  }
+
+  /* ---------- layout ---------- */
+  .wrap{display:flex;align-items:flex-start;gap:32px;padding:32px;max-width:1360px;margin:0 auto;}
+  .rail{flex:1;min-width:320px;}
+  .stage{flex-shrink:0;}
+
+  /* ---------- phone ---------- */
+  .phone{
+    width:432px; padding:15px; border-radius:56px; background:#1b1d22;
+    box-shadow:0 30px 70px rgba(0,26,68,.28), inset 0 0 0 2px #3a3d45;
+    position:sticky; top:32px;
+  }
+  .phone .screen{
+    width:402px; height:874px; border-radius:42px; overflow:hidden;
+    background:#fff; position:relative;
+  }
+  .phone iframe{width:402px;height:874px;border:0;display:block;}
+  .stage .caption{
+    text-align:center;color:var(--muted);font-size:12px;margin:12px 0 0;
+  }
+
+  /* ---------- cards ---------- */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px 24px;margin:0 0 20px;
+  }
+  .card h2{margin:0 0 4px;font-size:16px;}
+  .card h2 + p{margin:0 0 16px;color:var(--muted);font-size:13px;}
+
+  .how{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .how div{font-size:13px;color:var(--muted);}
+  .how b{display:block;color:var(--ink);font-size:13px;margin-bottom:2px;}
+
+  /* ---------- index ---------- */
+  .phase{margin:0 0 20px;}
+  .phase > h3{
+    margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--brand-500);
+  }
+  ol.screens{list-style:none;margin:0;padding:0;}
+  ol.screens li{border-top:1px solid var(--line);}
+  ol.screens li:first-child{border-top:0;}
+  ol.screens button{
+    width:100%;display:flex;align-items:baseline;gap:12px;text-align:left;
+    background:none;border:0;padding:10px 12px;margin:0;border-radius:10px;
+    font:inherit;color:inherit;cursor:pointer;
+  }
+  ol.screens button:hover{background:var(--brand-050);}
+  ol.screens button[aria-current="true"]{background:var(--brand-050);box-shadow:inset 3px 0 0 var(--brand-500);}
+  ol.screens .n{
+    font-variant-numeric:tabular-nums;font-weight:700;font-size:12px;
+    color:var(--brand-400);flex-shrink:0;width:20px;
+  }
+  ol.screens .t{flex:1;}
+  ol.screens .t b{display:block;font-weight:600;font-size:14px;}
+  ol.screens .t span{display:block;font-size:12px;color:var(--muted);margin-top:1px;}
+  .sub{
+    margin:2px 0 8px 44px;padding:0 0 0 14px;border-left:2px solid var(--line);
+    font-size:12px;color:var(--muted);
+  }
+  .sub li{margin:3px 0;list-style:none;}
+  .sub li::before{content:"↳ ";color:var(--brand-400);}
+
+  .bar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;
+    padding:12px 20px;font:600 14px/1 inherit;cursor:pointer;text-decoration:none;
+  }
+  .btn-primary{background:var(--brand-500);color:#fff;}
+  .btn-primary:hover{background:var(--brand-600);}
+  .btn-ghost{background:#fff;color:var(--brand-600);border:1px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--brand-400);}
+
+  footer{
+    padding:24px 32px 48px;text-align:center;color:var(--muted);font-size:12px;
+  }
+  footer b{color:var(--ink);}
+
+  /* Narrow windows: drop the phone below the index. */
+  @media (max-width:1120px){
+    .wrap{flex-direction:column-reverse;padding:20px;}
+    .phone{position:static;}
+  }
+  @media (max-width:480px){
+    .phone{width:100%;padding:0;border-radius:0;box-shadow:none;background:none;}
+    .phone .screen,.phone iframe{width:100%;height:80vh;border-radius:0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="assets/img/brand/logo-lockup.png" alt="Extra Space Asia">
+  <div class="titles">
+    <h1>Personal storage app — interactive prototype</h1>
+    <p>Singapore &amp; Malaysia · 24 screens · iPhone 17 (402 × 874)</p>
+  </div>
+  <span class="tag">Click through it</span>
+</header>
+
+<div class="wrap">
+
+  <div class="rail">
+
+    <div class="bar">
+      <button class="btn btn-primary" type="button" id="restart">Start from the splash screen</button>
+      <a class="btn btn-ghost" href="home.html" target="_blank" rel="noopener">Open full screen ↗</a>
+      <a class="btn btn-ghost" href="flow.html">Read the flow write-up</a>
+    </div>
+
+    <div class="card">
+      <h2>What this is</h2>
+      <p>A working prototype, not a video. Everything below is clickable.</p>
+      <div class="how">
+        <div><b>No install</b>Runs in any browser straight from the folder. Nothing to sign into.</div>
+        <div><b>Tap anything</b>Pins, cards, filters, forms and the bottom tab bar all respond.</div>
+        <div><b>Jump anywhere</b>Use the list below to land on any screen in the journey.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>The journey</h2>
+      <p>Five phases, in the order a personal-storage customer moves through them.</p>
+
+      <div class="phase">
+        <h3>Entry</h3>
+        <ol class="screens">
+          <li><button type="button" data-src="home.html?reset=1">
+            <span class="n">01</span><span class="t"><b>Splash</b>
+            <span>Brand holds 800 ms, then fades out</span></span></button></li>
+          <li><button type="button" data-src="home.html">
+            <span class="n">02</span><span class="t"><b>Home</b>
+            <span>Payment due, search, promotions, four quick actions</span></span></button></li>
+        </ol>
+      </div>
+
+      <div class="phase">
+        <h3>Find</h3>
+        <ol class="screens">
+          <li><button type="button" data-src="estimator.html">
+            <span class="n">03</span><span class="t"><b>Size estimator</b>
+            <span>Home size or item-by-item → recommended unit</span></span></button></li>
+          <li><button type="button" data-src="map.html">
+            <span class="n">04</span><span class="t"><b>Locations</b>
+            <span>Price pins, filters, results sheet</span></span></button></li>
+          <li><button type="button" data-src="facility.html?id=ayer-rajah">
+            <span class="n">05</span><span class="t"><b>Facility · Ayer Rajah</b>
+            <span>Units, prices, promotion, access hours</span></span></button></li>
+          <li><button type="button" data-src="facility.html?id=bukit-merah">
+            <span class="n">06</span><span class="t"><b>Facility · Bukit Merah</b></span></button></li>
+          <li><button type="button" data-src="facility.html?id=kallang">
+            <span class="n">07</span><span class="t"><b>Facility · Kallang</b></span></button></li>
+          <li><button type="button" data-src="facility.html?id=tai-seng">
+            <span class="n">08</span><span class="t"><b>Facility · Tai Seng</b></span></button></li>
+          <li><button type="button" data-src="facility.html?id=toa-payoh">
+            <span class="n">09</span><span class="t"><b>Facility · Toa Payoh</b>
+            <span>Woodlands and Changi are in the list too</span></span></button></li>
+        </ol>
+      </div>
+
+      <div class="phase">
+        <h3>Convert</h3>
+        <ol class="screens">
+          <li><button type="button" data-src="facility.html?id=ayer-rajah">
+            <span class="n">10</span><span class="t"><b>Enquire</b>
+            <span>Press “Enquire now” on any facility</span></span></button></li>
+        </ol>
+        <ul class="sub">
+          <li>Step 1 of 2 — name, mobile, email, move-in date</li>
+          <li>Step 2 of 2 — reference number, rate held 7 days</li>
+          <li>No account needed to get this far</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <h3>Sign in</h3>
+        <ol class="screens">
+          <li><button type="button" data-src="account.html">
+            <span class="n">11</span><span class="t"><b>My storage · login wall</b>
+            <span>Blurred peek, lock, and the reason it is asking</span></span></button></li>
+          <li><button type="button" data-src="login.html?next=account.html">
+            <span class="n">12</span><span class="t"><b>Sign in</b>
+            <span>Mobile number → 6-digit code → verifying</span></span></button></li>
+        </ol>
+        <ul class="sub">
+          <li>Steps 1–3 shown throughout; password is the fallback, not the front door</li>
+          <li>Returns you to wherever you started</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <h3>Manage</h3>
+        <ol class="screens">
+          <li><button type="button" data-src="account.html">
+            <span class="n">13</span><span class="t"><b>My storage · bookings</b>
+            <span>Both units, next invoice, billing, past bookings</span></span></button></li>
+          <li><button type="button" data-src="booking.html?id=bk-04118">
+            <span class="n">14</span><span class="t"><b>Booking detail · 50 sq ft</b>
+            <span>Lease terms, invoices, modify or end</span></span></button></li>
+          <li><button type="button" data-src="booking.html?id=bk-04118&amp;action=gate">
+            <span class="n">15</span><span class="t"><b>Access code</b>
+            <span>Revealed for 30 seconds, then hidden</span></span></button></li>
+          <li><button type="button" data-src="booking.html?id=bk-04118&amp;action=pay">
+            <span class="n">16</span><span class="t"><b>Pay invoice</b>
+            <span>GIRO or card, then a receipt</span></span></button></li>
+          <li><button type="button" data-src="booking.html?id=bk-w021">
+            <span class="n">17</span><span class="t"><b>Booking detail · wine locker</b>
+            <span>13–15 °C, 70 % humidity</span></span></button></li>
+          <li><button type="button" data-src="profile.html">
+            <span class="n">18</span><span class="t"><b>Profile</b>
+            <span>Contact details, notifications, payment, security</span></span></button></li>
+        </ol>
+        <ul class="sub">
+          <li>Extend — 6 or 12 months, 5 % off for a year</li>
+          <li>End booking — 10 days’ notice enforced, reason asked, 6 pm acknowledgement</li>
+          <li>After ending, the unit shows “Move-out scheduled” and can be cancelled</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="screen">
+        <iframe id="device" src="home.html?reset=1" title="Extra Space Asia app prototype"></iframe>
+      </div>
+    </div>
+    <p class="caption">iPhone 17 · 402 × 874 pt</p>
+  </div>
+
+</div>
+
+<footer>
+  <b>Extra Space Asia</b> — personal storage app prototype · prepared for proposal review<br>
+  Runs entirely offline — the map included.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var device = document.getElementById("device");
+  var buttons = Array.prototype.slice.call(document.querySelectorAll("ol.screens button"));
+
+  function load(src, btn) {
+    device.src = src;
+    buttons.forEach(function (b) { b.setAttribute("aria-current", b === btn ? "true" : "false"); });
+    if (window.innerWidth <= 1120) {
+      document.querySelector(".phone").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener("click", function () { load(btn.dataset.src, btn); });
+  });
+
+  document.getElementById("restart").addEventListener("click", function () {
+    load("home.html?reset=1", buttons[0]);
+  });
+
+  buttons[0].setAttribute("aria-current", "true");
+})();
+</script>
+
+</body>
+</html>
